@@ -211,6 +211,7 @@ def get_profile_image():
     if request.method == 'GET':
         user = UserProfile.query.filter_by(user_id=user_id).first()
         print(user)
+        print(user)
         return jsonify({
             'id': user.id,
             'user_id': user.user_id,
