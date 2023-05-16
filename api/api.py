@@ -210,7 +210,7 @@ def get_profile_image():
     user_id = g.flask_httpauth_user.id
     if request.method == 'GET':
         user = UserProfile.query.filter_by(user_id=user_id).first()
-
+        print(user)
         return jsonify({
             'id': user.id,
             'user_id': user.user_id,
