@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 from db_models.Equipment import GymItem
 from db_models.token import Token
 from db_models.users import User, UserProfile
-from main import db
+from app import db
 from managers.auth import AuthManager, auth
 from managers.user import verify_user
 from utils.helper import modify_name, generate_unique_id

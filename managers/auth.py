@@ -5,7 +5,7 @@ from flask_httpauth import HTTPTokenAuth
 from werkzeug.exceptions import BadRequest
 
 from db_models.token import Token
-from main import db
+from app import db
 
 
 class AuthManager:
