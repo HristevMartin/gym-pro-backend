@@ -1,5 +1,8 @@
 # app.py
 
+import os
+from urllib.parse import quote_plus
+
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -8,8 +11,16 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 CORS(app)
 
+uri = os.getenv('DATABASE_URL', '')
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+safe_uri = quote_plus(uri)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = safe_uri
+
 # Configure the Flask app and database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost:5432/mydatabase'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
