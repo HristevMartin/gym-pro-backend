@@ -33,6 +33,7 @@ def register_user():
     db.session.add(saved_data)
     try:
         db.session.commit()
+
     except Exception as ex:
         raise BadRequest("Please login")
     return str(201)
