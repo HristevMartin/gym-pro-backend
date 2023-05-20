@@ -36,7 +36,7 @@ def register_user():
 
     except Exception as ex:
         raise BadRequest("Please login")
-    return str(201)
+    return '', 201
 
 
 @register_route.route('/login', methods=['POST'])
@@ -48,6 +48,8 @@ def login_user():
 
 @register_route.route('/logout')
 def user_logout():
+    import logging
+    logging.error('into the logout')
     token = request.headers.get('Authorization').split()[1]
     token_db = Token.query.filter_by(token=token).first()
 
