@@ -1,15 +1,16 @@
 from flask import Blueprint, request, jsonify
 from flask import g
+from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
 
+from app import db
 from db_models.Equipment import GymItem
 from db_models.token import Token
 from db_models.users import User, UserProfile
-from app import db
 from managers.auth import AuthManager, auth
 from managers.user import verify_user
-from utils.helper import modify_name, generate_unique_id
+from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id
 
 register_route = Blueprint('register', __name__)
 
@@ -73,18 +74,39 @@ def home():
 @register_route.route('/gym-items', methods=['GET', 'POST'])
 @auth.login_required
 def gym_items():
-    if request.method == 'POST':
-        data = request.get_json()
+    user_id = g.flask_httpauth_user.id
+    filename = check_if_image_is_valid(request)
+    if filename:
+        data = request.form.to_dict()
+
+        data['image_url_path'] = filename
+
         item_id = generate_unique_id()
         data['item_id'] = item_id
-        data['user_id'] = auth.current_user().id
-        gym_data = GymItem(**data)
-        db.session.add(gym_data)
+        data['user_id'] = user_id
+
+        saved_data = GymItem(**data)
+        db.session.add(saved_data)
         try:
             db.session.commit()
             return 'Gym Item created', 201
         except Exception as ex:
             return 'problem when creating the gym item', 400
+
+
+# def gym_items():
+#     if request.method == 'POST':
+#         data = request.get_json()
+#         item_id = generate_unique_id()
+#         data['item_id'] = item_id
+#         data['user_id'] = auth.current_user().id
+#         gym_data = GymItem(**data)
+#         db.session.add(gym_data)
+#         try:
+#             db.session.commit()
+#             return 'Gym Item created', 201
+#         except Exception as ex:
+#             return 'problem when creating the gym item', 400
 
 
 @register_route.route('/all-gym-items')
@@ -99,6 +121,7 @@ def all_gym_items():
             'category': gym_item.category,
             'price': gym_item.price,
             'image_url': gym_item.image_url,
+            'image_url_path': gym_item.image_url_path,
         }
         gym_items_list.append(gym_item_dict)
     return jsonify(gym_items_list), 200
@@ -131,6 +154,7 @@ def get_user_item():
             'category': user_item.category,
             'price': user_item.price,
             'image_url': user_item.image_url,
+            'image_url_path': user_item.image_url_path,
             'item_id': user_item.item_id,
         }
         user_items_list.append(user_item_dict)
@@ -138,11 +162,15 @@ def get_user_item():
     return user_items_list
 
 
-@register_route.route('/item-detail/<item_id>', methods=['GET', 'PUT', 'DELETE'])
+@register_route.route('/item-detail/<item_id>', methods=['GET', 'POST', 'DELETE'])
 @auth.login_required
 def item_detail(item_id):
-    if request.method == 'PUT':
-        data = request.get_json()
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        if 'image_file' in request.files:
+            filename = check_if_image_is_valid(request)
+            if filename:
+                data['image_url_path'] = filename
         GymItem.query.filter_by(item_id=item_id).update(data)
         try:
             db.session.commit()
@@ -156,6 +184,8 @@ def item_detail(item_id):
                     'price': updated_item.price,
                     'image_url': updated_item.image_url,
                     'description': updated_item.description,
+                    'image_url_path': updated_item.image_url_path,
+
                 }
             }), 200
         except Exception as ex:
@@ -163,6 +193,7 @@ def item_detail(item_id):
                 'success': False,
                 'message': str(ex),
             }), 400
+
     elif request.method == 'DELETE':
         GymItem.query.filter_by(item_id=item_id).delete()
         try:
@@ -185,6 +216,7 @@ def item_detail(item_id):
             'price': item.price,
             'image_url': item.image_url,
             'description': item.description,
+            'image_url_path': item.image_url_path,
         }
         return jsonify(item_dict), 200
 
@@ -213,38 +245,55 @@ def get_profile_image():
     user_id = g.flask_httpauth_user.id
     if request.method == 'GET':
         user = UserProfile.query.filter_by(user_id=user_id).first()
-        print(user)
-        print(user)
-        return jsonify({
-            'id': user.id,
-            'user_id': user.user_id,
-            'name': user.name,
-            'hobby': user.hobby,
-            'location': user.location,
-        }), 200
+
+        if user:
+            return jsonify({
+                'id': user.id,
+                'user_id': user.user_id,
+                'name': user.name,
+                'hobby': user.hobby,
+                'location': user.location,
+                'image': user.image_filename,
+            }), 200
+        else:
+            return jsonify({
+                'message': 'User profile not found',
+            }), 404
     elif request.method == 'POST':
+
+        filename = check_if_image_is_valid(request)
+
         user_data = UserProfile.query.filter_by(user_id=user_id).first()
+
         if user_data:
             # Update existing user profile data
             user_data.name = request.form.get('name')
             user_data.hobby = request.form.get('hobby')
             user_data.location = request.form.get('location')
+            user_data.image_filename = filename
+
             try:
                 db.session.commit()
                 return 'User profile updated', 201
             except Exception as ex:
                 return 'Problem when updating the user profile', 400
-        else:
+        elif user_data is None and filename is not None:
             # Create a new user profile entry
             user_data = UserProfile(
                 user_id=user_id,
                 name=request.form.get('name'),
                 hobby=request.form.get('hobby'),
-                location=request.form.get('location')
+                location=request.form.get('location'),
+                image_filename=filename
             )
             db.session.add(user_data)
             try:
                 db.session.commit()
                 return 'User profile created', 201
-            except Exception as ex:
+            except Exception:
                 return 'Problem when creating the user profile', 400
+
+
+@register_route.route('/upload_profile_images/<filename>')
+def serve_profile_image(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)

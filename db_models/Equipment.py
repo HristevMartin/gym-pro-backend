@@ -8,7 +8,8 @@ class GymItem(db.Model):
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    image_url = db.Column(db.String(255), nullable=False)
+    image_url = db.Column(db.String(255), nullable=True)
+    image_url_path = db.Column(db.String(255), nullable=True)
     # create a relationship with the user table
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     item_id = db.Column(db.String(255), nullable=False, unique=True)

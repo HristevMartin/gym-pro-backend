@@ -23,3 +23,4 @@ class UserProfile(db.Model):
     location = db.Column(db.String(100))
     hobby = db.Column(db.String(100))
     user_id = db.Column(db.Integer)
+    image_filename = db.Column(db.String(255), nullable=True)
