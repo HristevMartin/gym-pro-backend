@@ -22,10 +22,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
 
 with app.app_context():
-    from db_models.users import User
-    from db_models.users import UserProfile
-    from db_models.Equipment import GymItem
-    from db_models.token import Token
     db.create_all()
 
 # Import your routes here

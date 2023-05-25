@@ -37,7 +37,7 @@ def check_if_image_is_valid(request):
     if 'image_file' not in request.files and 'image' not in request.files:
         return 'No file part', 400
 
-    file = request.files['image_file'] or request.files['image']
+    file = request.files['image_file']
 
     if file.filename == '':
         return 'No selected file', 400

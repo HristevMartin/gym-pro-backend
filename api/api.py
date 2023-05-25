@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 from flask import g
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
@@ -92,21 +92,8 @@ def gym_items():
             return 'Gym Item created', 201
         except Exception as ex:
             return 'problem when creating the gym item', 400
-
-
-# def gym_items():
-#     if request.method == 'POST':
-#         data = request.get_json()
-#         item_id = generate_unique_id()
-#         data['item_id'] = item_id
-#         data['user_id'] = auth.current_user().id
-#         gym_data = GymItem(**data)
-#         db.session.add(gym_data)
-#         try:
-#             db.session.commit()
-#             return 'Gym Item created', 201
-#         except Exception as ex:
-#             return 'problem when creating the gym item', 400
+    else:
+        return 'problem when creating the gym item', 400
 
 
 @register_route.route('/all-gym-items')
@@ -115,6 +102,7 @@ def all_gym_items():
     gym_items_list = []
     for gym_item in gym_items:
         gym_item_dict = {
+            'primary_id': gym_item.id,
             'id': gym_item.user_id,
             'item_id': gym_item.item_id,
             'name': gym_item.name,
@@ -171,6 +159,8 @@ def item_detail(item_id):
             filename = check_if_image_is_valid(request)
             if filename:
                 data['image_url_path'] = filename
+            else:
+                return jsonify({'failure': 'image is not valid'}), 400
         GymItem.query.filter_by(item_id=item_id).update(data)
         try:
             db.session.commit()
@@ -261,7 +251,10 @@ def get_profile_image():
             }), 404
     elif request.method == 'POST':
 
-        filename = check_if_image_is_valid(request)
+        filename = ''
+
+        if request.files:
+            filename = check_if_image_is_valid(request)
 
         user_data = UserProfile.query.filter_by(user_id=user_id).first()
 
@@ -270,7 +263,7 @@ def get_profile_image():
             user_data.name = request.form.get('name')
             user_data.hobby = request.form.get('hobby')
             user_data.location = request.form.get('location')
-            user_data.image_filename = filename
+            user_data.image_filename = filename if filename else user_data.image_filename
 
             try:
                 db.session.commit()
@@ -297,3 +290,9 @@ def get_profile_image():
 @register_route.route('/upload_profile_images/<filename>')
 def serve_profile_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+
+@register_route.route('/delete_all_gym_items', methods=['DELETE'])
+def delete_gym_items():
+    GymItem.query.delete()
+    db.session.commit()
+    return 'All gym items deleted', 200
