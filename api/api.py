@@ -1,21 +1,27 @@
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, jsonify
 from flask import g
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
-
-from app import db
+from flask_mail import Mail, Message
+from app import db, app, SendGridAPIClient, sendgrid_client
 from db_models.Equipment import GymItem
 from db_models.token import Token
 from db_models.users import User, UserProfile
 from managers.auth import AuthManager, auth
 from managers.user import verify_user
-from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id
+from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id, \
+    send_registration_email
+from flask import Blueprint, request, jsonify, current_app
+from flask import Flask, request
+
+
+
+
 
 register_route = Blueprint('register', __name__)
 
 
-# Create an upload set for images
 
 
 # Define your register route here
@@ -34,9 +40,10 @@ def register_user():
     db.session.add(saved_data)
     try:
         db.session.commit()
-
+        send_registration_email(saved_data.email)
     except Exception as ex:
         raise BadRequest("Please login")
+
     return '', 201
 
 
@@ -49,8 +56,6 @@ def login_user():
 
 @register_route.route('/logout')
 def user_logout():
-    import logging
-    logging.error('into the logout')
     token = request.headers.get('Authorization').split()[1]
     token_db = Token.query.filter_by(token=token).first()
 
@@ -62,7 +67,7 @@ def user_logout():
         except Exception as ex:
             return 'problem when deleting the token', 400
     else:
-        return 'problem when deleting the token', 400
+        return 'problem when deleting the token', 204
 
 
 @register_route.route('/home')
@@ -290,6 +295,7 @@ def get_profile_image():
 @register_route.route('/upload_profile_images/<filename>')
 def serve_profile_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+
 
 @register_route.route('/delete_all_gym_items', methods=['DELETE'])
 def delete_gym_items():

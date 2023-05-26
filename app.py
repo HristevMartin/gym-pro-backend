@@ -1,19 +1,19 @@
 import os
-from urllib.parse import quote_plus
 
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sendgrid import SendGridAPIClient
 
-# Initialize the Flask app
+
 app = Flask(__name__)
+
+app.config['SENDGRID_API_KEY'] = os.getenv('SENDGRID_API_KEY')
+sendgrid_client = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
+
 CORS(app)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# this is for local env
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pass@localhost:3306/gym_db'
-
 
 db_path = os.path.join(os.path.dirname(__file__), 'gym_db.sqlite')
 db_uri = 'sqlite:///{}'.format(db_path)

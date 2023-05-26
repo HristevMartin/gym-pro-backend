@@ -1,7 +1,11 @@
 import os
 import uuid
 
+from flask import render_template
+from sendgrid.helpers.mail import Mail
 from werkzeug.utils import secure_filename
+
+from app import sendgrid_client
 
 
 def modify_name(data):
@@ -48,3 +52,26 @@ def check_if_image_is_valid(request):
         return filename
     else:
         return False
+
+
+def send_registration_email(recipient):
+    sender = 'virtoala0@gmail.com'
+    subject = 'Welcome to Our App'
+    message = "Welcome to our gym app. We are glad to have you here. "
+
+    content = render_template('welcome_email.html', message=message)
+
+    message = Mail(
+        from_email=sender,
+        to_emails=recipient,
+        subject=subject,
+        html_content=content
+    )
+
+    try:
+        sendgrid_client.send(message)
+
+        return 'Email sent successfully'
+    except Exception as e:
+        print(str(e))
+        return 'Failed to send email'
