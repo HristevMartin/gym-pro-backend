@@ -1,10 +1,10 @@
-from flask import Blueprint, request, jsonify
-from flask import g
+from flask import g, Blueprint, jsonify
+from flask import request
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
-from flask_mail import Mail, Message
-from app import db, app, SendGridAPIClient, sendgrid_client
+
+from app import db
 from db_models.Equipment import GymItem
 from db_models.token import Token
 from db_models.users import User, UserProfile
@@ -12,16 +12,8 @@ from managers.auth import AuthManager, auth
 from managers.user import verify_user
 from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id, \
     send_registration_email
-from flask import Blueprint, request, jsonify, current_app
-from flask import Flask, request
-
-
-
-
 
 register_route = Blueprint('register', __name__)
-
-
 
 
 # Define your register route here
@@ -302,3 +294,13 @@ def delete_gym_items():
     GymItem.query.delete()
     db.session.commit()
     return 'All gym items deleted', 200
+
+
+@register_route.route('/delete_email_address', methods=['DELETE'])
+def delete_email_address():
+    email = request.args.get('email')
+    email = User.query.filter_by(email=email).first()
+    db.session.delete(email)
+    db.session.commit()
+
+    return 'All email addresses deleted', 200
