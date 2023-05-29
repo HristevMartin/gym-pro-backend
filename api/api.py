@@ -1,4 +1,5 @@
-from flask import g, Blueprint, jsonify
+import jwt
+from flask import g, Blueprint, jsonify, render_template
 from flask import request
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
@@ -11,7 +12,7 @@ from db_models.users import User, UserProfile
 from managers.auth import AuthManager, auth
 from managers.user import verify_user
 from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id, \
-    send_registration_email
+    send_registration_email, send_reset_email
 
 register_route = Blueprint('register', __name__)
 
@@ -302,5 +303,82 @@ def delete_email_address():
     email = User.query.filter_by(email=email).first()
     db.session.delete(email)
     db.session.commit()
-
     return 'All email addresses deleted', 200
+
+
+@register_route.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    email = data.get('email')
+    user = User.query.filter_by(email=email).first()
+    if user:
+        token = AuthManager.encode_password_reset_token(user)
+        sent_email = send_reset_email(user, token)
+        if sent_email:
+            return jsonify({
+                'success': True,
+                'message': 'Password reset email sent',
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Problem sending password reset email',
+            }), 404
+    else:
+        return jsonify({
+            'success': False,
+            'message': 'Email address not found',
+        }), 404
+
+import os
+
+frontend_host = os.environ.get('FRONTEND_URL')
+frontend_url = frontend_host + '/login'
+
+
+@register_route.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if request.method == 'GET':
+        try:
+            user_id = AuthManager.decode_password_reset_token(token)
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Expired token'}), 400
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid token'}), 400
+
+        # Find the user with the provided ID
+        user = User.query.get(user_id)
+        if not user:
+            return render_template('reset_password_error.html', error='User not found')
+
+        return render_template('reset_password_form.html', token=token)
+
+    if request.method == 'POST':
+        pw = request.form.get('new_password')
+        pw2 = request.form.get('new_password_repeated')
+        if pw != pw2:
+            return render_template('reset_password_error.html', error='Passwords do not match')
+        else:
+            try:
+                user_id = AuthManager.decode_password_reset_token(token)
+            except jwt.ExpiredSignatureError:
+                return jsonify({'message': 'Expired token'}), 400
+            except jwt.InvalidTokenError:
+                return jsonify({'message': 'Invalid token'}), 400
+
+            # Find the user with the provided ID
+            user = User.query.get(user_id)
+            if not user:
+                return render_template('reset_password_error.html', error='User not found')
+
+            user.password = generate_password_hash(pw)
+            db.session.commit()
+
+            return render_template('reset_password_success.html', frontend_url=frontend_url)
+
+
+
+
+# @register_route.route('/sample')
+# def sample():
+#     return render_template('reset_password_success.html', frontend_url=frontend_url)

@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from flask import render_template
+from flask import render_template, url_for
 from sendgrid.helpers.mail import Mail
 from werkzeug.utils import secure_filename
 
@@ -75,3 +75,31 @@ def send_registration_email(recipient):
     except Exception as e:
         print(str(e))
         return 'Failed to send email'
+
+
+def send_reset_email(user, token):
+    sender = 'virtoala0@gmail.com'
+    recipient = user.email
+    subject = 'Reset Your Password'
+
+    reset_url = url_for('register.reset_password', token=token, _external=True)
+
+    message = f'''To reset your password, visit the following link: {reset_url}
+    If you did not make this request then simply ignore this email and no changes will be made.
+    '''
+
+    content = render_template('reset_password_email.html', reset_url=reset_url)
+
+    message = Mail(
+        from_email=sender,
+        to_emails=recipient,
+        subject=subject,
+        html_content=content
+    )
+
+    try:
+        sendgrid_client.send(message)
+        return 1
+    except Exception as e:
+        print(str(e))
+        return 0
