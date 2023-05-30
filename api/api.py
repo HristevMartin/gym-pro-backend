@@ -380,6 +380,10 @@ def reset_password(token):
             return render_template('reset_password_success.html', frontend_url=frontend_url)
 
 
+@app.errorhandler(Exception)
+def handle_exception(e):
+    app.logger.error(f'An error occurred: {str(e)}')
+    return str(e), 500
 
 
 # @register_route.route('/sample')
