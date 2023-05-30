@@ -375,7 +375,8 @@ def reset_password(token):
             db.session.commit()
 
             import logging
-            app.logger.info(f'show me the frontend url', frontend_url)
+            app.logger.info(f'show me the frontend url: {frontend_url}')
+
             return render_template('reset_password_success.html', frontend_url=frontend_url)
 
 
