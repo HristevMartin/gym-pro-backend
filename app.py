@@ -30,6 +30,14 @@ from api.api import register_route
 # Register your routes with the Flask app
 app.register_blueprint(register_route)
 
+import sys
+import logging
+
+if app.debug is not True:   # configure logging for when app.debug is False
+    stream_handler = logging.StreamHandler(sys.stdout)
+    app.logger.addHandler(stream_handler)
+    app.logger.setLevel(logging.INFO)
+
 # Start the Flask app
 if __name__ == '__main__':
     app.run()
