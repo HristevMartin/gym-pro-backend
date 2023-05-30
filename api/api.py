@@ -334,7 +334,7 @@ import os
 
 frontend_host = os.environ.get('FRONTEND_URL')
 frontend_url = frontend_host + '/login'
-
+app.logger.info(f'show me the frontend urlllllllll: {frontend_url}')
 
 @register_route.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
