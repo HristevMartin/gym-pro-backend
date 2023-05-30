@@ -374,6 +374,8 @@ def reset_password(token):
             user.password = generate_password_hash(pw)
             db.session.commit()
 
+            import logging
+            logging.info(f'show me the frontend url', frontend_url)
             return render_template('reset_password_success.html', frontend_url=frontend_url)
 
 
