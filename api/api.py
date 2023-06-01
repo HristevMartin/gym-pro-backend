@@ -389,5 +389,6 @@ def handle_exception(e):
 
 @register_route.route('/get-all-emails')
 def get_all_emails():
+    print('get all emails')
     emails = User.query.all()
     return jsonify([e.email for e in emails]), 200
