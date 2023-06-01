@@ -256,11 +256,13 @@ def get_profile_image():
 
         user_data = UserProfile.query.filter_by(user_id=user_id).first()
 
+        form_data = request.form.to_dict()
+
         if user_data:
             # Update existing user profile data
-            user_data.name = request.form.get('name')
-            user_data.hobby = request.form.get('hobby')
-            user_data.location = request.form.get('location')
+            user_data.name = form_data['name'] if form_data['name'] else user_data.name
+            user_data.hobby = form_data['hobby'] if form_data['hobby'] else user_data.hobby
+            user_data.location = form_data['location'] if form_data['location'] else user_data.location
             user_data.image_filename = filename if filename else user_data.image_filename
 
             try:
@@ -268,20 +270,20 @@ def get_profile_image():
                 return 'User profile updated', 201
             except Exception as ex:
                 return 'Problem when updating the user profile', 400
-        elif user_data is None and filename is not None:
-            # Create a new user profile entry
-            user_data = UserProfile(
+        elif not user_data:
+            # Create new user profile data
+            new_user_profile = UserProfile(
                 user_id=user_id,
-                name=request.form.get('name'),
-                hobby=request.form.get('hobby'),
-                location=request.form.get('location'),
-                image_filename=filename
+                name=form_data['name'] if form_data['name'] else '',
+                hobby=form_data['hobby'] if form_data['hobby'] else '',
+                location=form_data['location'] if form_data['location'] else '',
+                image_filename=filename if filename else '',
             )
-            db.session.add(user_data)
             try:
+                db.session.add(new_user_profile)
                 db.session.commit()
                 return 'User profile created', 201
-            except Exception:
+            except Exception as ex:
                 return 'Problem when creating the user profile', 400
 
 
@@ -380,12 +382,7 @@ def reset_password(token):
             return render_template('reset_password_success.html', frontend_url=frontend_url)
 
 
-@app.errorhandler(Exception)
-def handle_exception(e):
-    app.logger.error(f'An error occurred: {str(e)}')
-    return str(e), 500
-
-
-# @register_route.route('/sample')
-# def sample():
-#     return render_template('reset_password_success.html', frontend_url=frontend_url)
+# @app.errorhandler(Exception)
+# def handle_exception(e):
+#     app.logger.error(f'An error occurred: {str(e)}')
+#     return str(e), 500

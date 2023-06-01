@@ -84,10 +84,6 @@ def send_reset_email(user, token):
 
     reset_url = url_for('register.reset_password', token=token, _external=True)
 
-    message = f'''To reset your password, visit the following link: {reset_url}
-    If you did not make this request then simply ignore this email and no changes will be made.
-    '''
-
     content = render_template('reset_password_email.html', reset_url=reset_url)
 
     message = Mail(
