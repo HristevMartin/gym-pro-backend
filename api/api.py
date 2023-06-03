@@ -17,7 +17,6 @@ from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, ge
 register_route = Blueprint('register', __name__)
 
 
-# Define your register route here
 @register_route.route('/register', methods=['POST'])
 def register_user():
     data = request.get_json()
@@ -332,11 +331,13 @@ def forgot_password():
             'message': 'Email address not found',
         }), 404
 
+
 import os
 
 frontend_host = os.environ.get('FRONTEND_URL')
 frontend_url = frontend_host + '/login'
 app.logger.info(f'show me the frontend urlllllllll: {frontend_url}')
+
 
 @register_route.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -376,7 +377,6 @@ def reset_password(token):
             user.password = generate_password_hash(pw)
             db.session.commit()
 
-            import logging
             app.logger.info(f'show me the frontend url: {frontend_url}')
 
             return render_template('reset_password_success.html', frontend_url=frontend_url)
@@ -387,8 +387,7 @@ def handle_exception(e):
     app.logger.error(f'An error occurred: {str(e)}')
     return str(e), 500
 
-@register_route.route('/get-all-emails')
-def get_all_emails():
-    print('get all emails')
-    emails = User.query.all()
-    return jsonify([e.email for e in emails]), 200
+# @register_route.route('/test-user', methods=['GET'])
+# def get_users():
+#     users = User.query.all()
+#     return users
