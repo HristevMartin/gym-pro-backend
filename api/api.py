@@ -387,7 +387,8 @@ def handle_exception(e):
     app.logger.error(f'An error occurred: {str(e)}')
     return str(e), 500
 
-# @register_route.route('/test-user', methods=['GET'])
-# def get_users():
-#     users = User.query.all()
-#     return users
+@register_route.route('/test-user', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return users
+
