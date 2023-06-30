@@ -1,12 +1,12 @@
 import jwt
-from flask import g, Blueprint, jsonify, render_template
-from flask import request
+from flask import g, Blueprint, render_template
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
 
 from app import db, app
 from db_models.Equipment import GymItem
+from db_models.forum import Forum, Reaction, View, Comment
 from db_models.token import Token
 from db_models.users import User, UserProfile
 from managers.auth import AuthManager, auth
@@ -20,7 +20,6 @@ register_route = Blueprint('register', __name__)
 @register_route.route('/register', methods=['POST'])
 def register_user():
     data = request.get_json()
-
     modify_name(data)
 
     data["password"] = generate_password_hash(str(data["password"]))
@@ -110,20 +109,6 @@ def all_gym_items():
         }
         gym_items_list.append(gym_item_dict)
     return jsonify(gym_items_list), 200
-
-
-@register_route.route('/upload-user-image', methods=['POST'])
-@auth.login_required
-def upload_user_image():
-    data = request.get_json()
-    user = auth.current_user()
-    updated_user = User.query.filter_by(id=user.id).update({'image_url': data['image_url']})
-    try:
-        db.session.add(updated_user)
-        db.session.commit()
-        return 'User image updated', 201
-    except Exception as ex:
-        return 'problem when updating the user image', 400
 
 
 @register_route.route('/get-user-item')
@@ -266,11 +251,12 @@ def get_profile_image():
 
             try:
                 db.session.commit()
-                return 'User profile updated', 201
+                return filename, 201
             except Exception as ex:
                 return 'Problem when updating the user profile', 400
         elif not user_data:
             # Create new user profile data
+
             new_user_profile = UserProfile(
                 user_id=user_id,
                 name=form_data['name'] if form_data['name'] else '',
@@ -387,8 +373,172 @@ def handle_exception(e):
     app.logger.error(f'An error occurred: {str(e)}')
     return str(e), 500
 
-@register_route.route('/test-user', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    return users
 
+@register_route.route('/forum-data', methods=['GET', 'POST'])
+@auth.login_required
+def get_users():
+    user_id = g.flask_httpauth_user.id
+
+    if request.method == 'GET':
+        forum_data = Forum.query.all()
+        forum_data = [forum.to_dict() for forum in forum_data]
+        return jsonify(forum_data), 200
+    elif request.method == 'POST':
+        data = request.get_json()
+        forum = Forum(
+            title=data['title'],
+            description=data['description'],
+            user_id=user_id,
+        )
+        db.session.add(forum)
+        try:
+            db.session.commit()
+        except Exception as ex:
+            return jsonify({
+                'message': 'Problem when creating the forum'}), 400
+
+        return jsonify({
+            'message': 'Forum created'}), 201
+
+
+@register_route.route('/forum-data/<forum_id>', methods=['GET', 'PUT', 'DELETE'])
+@auth.login_required
+def get_forum_message(forum_id):
+    user_id = g.flask_httpauth_user.id
+
+    forum = Forum.query.get(forum_id)
+    if request.method == 'GET':
+        if forum:
+            existing_view = View.query.filter_by(user_id=user_id, forum_id=forum_id).first()
+            if not existing_view:
+                view = View(
+                    user_id=user_id,
+                    forum_id=forum_id,
+                )
+                db.session.add(view)
+                db.session.commit()
+
+                Forum.query.filter_by(id=forum_id).update({'views': Forum.views + 1})
+                db.session.commit()
+            elif Forum.query.filter_by(id=forum_id).all()[0].views == 0:
+                Forum.query.filter_by(id=forum_id).update({'views': Forum.views + 1})
+                db.session.commit()
+        forum_data = forum.to_dict()
+        print(forum_data)
+        return jsonify(forum_data), 200
+
+
+@register_route.route('/get_forum_messages/<forum_id>', methods=['GET'])
+def get_forum_messages(forum_id):
+    forum_id = forum_id
+    forum = Forum.query.get(forum_id)
+
+    if forum is None:
+        return 'Forum post not found', 404
+
+    forum_messages = forum.comments
+
+    return [x.to_dict() for x in forum_messages], 200
+
+
+@register_route.route('/save-emoji', methods=['POST'])
+@auth.login_required
+def save_emoji():
+    try:
+        user_id = g.flask_httpauth_user.id
+        data = request.get_json()
+        data['user_id'] = user_id
+        existing_reaction = Reaction.query.filter_by(comment_id=data['id'], user_id=user_id).first()
+
+        if existing_reaction:
+            if existing_reaction.emoji == data['emoji']:
+                # If the user already reacted with the same emoji, do nothing
+                return jsonify({
+                    'message': 'Reaction already exists',
+                }), 200
+            else:
+                # If the user already reacted but with a different emoji, update the reaction
+                existing_reaction.emoji = data['emoji']
+                db.session.commit()
+                return jsonify({
+                    'message': 'Reaction updated',
+                }), 200
+        else:
+            # If the user has not yet reacted, create a new reaction
+            reaction = Reaction(user_id=user_id, comment_id=data['id'], emoji=data['emoji'])
+            db.session.add(reaction)
+            db.session.commit()
+            forum_likes = Forum.query.get(data['forum_id'])
+            if forum_likes:
+                forum_likes.likes += 1
+                db.session.commit()
+            else:
+                print(f'been here')
+                pass
+            return jsonify({
+                'message': 'Reaction created',
+                '_id': reaction.id
+            }), 201
+
+    except Exception as ex:
+        return jsonify({
+            'message': 'Problem when creating the reaction'}), 400
+
+
+@register_route.route('/get-emoji/<int:comment_id>', methods=['GET'])
+@auth.login_required
+def get_emoji(comment_id):
+    reactions = Reaction.query.filter_by(comment_id=comment_id).all()
+    reaction_data = [{'user_id': reaction.user_id, 'emoji': reaction.emoji} for reaction in reactions]
+    return jsonify(reaction_data), 200
+
+
+from flask import request, jsonify
+
+
+@register_route.route('/get-usernames', methods=['POST'])
+def get_usernames():
+    user_ids = request.get_json()
+
+    users = User.query.filter(User.id.in_(user_ids)).all()
+
+    usernames = {user.id: user.email.split('@')[0] for user in users}
+
+    return jsonify(usernames), 200
+
+
+@register_route.route('/save-comment/<int:forum_id>', methods=['POST'])
+@auth.login_required
+def save_comment(forum_id):
+    user_id = g.flask_httpauth_user.id
+
+    if request.method == 'POST':
+        data = request.get_json()
+        data['user_id'] = user_id
+        data['forum_id'] = forum_id
+        saved_data = Comment(**data)
+        db.session.add(saved_data)
+        try:
+            db.session.commit()
+            return jsonify({
+                'message': 'Comment created'}), 201
+        except Exception as ex:
+            return jsonify({
+                'message': 'Problem when creating the comment'}), 400
+
+
+@register_route.route('/edit-delete-comment/<int:comment_id>', methods=['PUT', 'DELETE'])
+def edit_delete_comment(comment_id):
+    comment = Comment.query.get(comment_id)
+
+    if request.method == 'PUT':
+        data = request.get_json()
+        comment.content = data['content']
+        db.session.commit()
+        data_return = comment.to_dict()
+        return jsonify(data_return), 201
+    elif request.method == 'DELETE':
+        db.session.delete(comment)
+        db.session.commit()
+        return jsonify({
+            'message': 'Comment deleted'}), 200

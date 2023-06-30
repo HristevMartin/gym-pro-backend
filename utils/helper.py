@@ -2,6 +2,7 @@ import os
 import uuid
 
 from flask import render_template, url_for
+from google.cloud import storage
 from sendgrid.helpers.mail import Mail
 from werkzeug.utils import secure_filename
 
@@ -38,6 +39,14 @@ def allowed_file(filename):
 
 
 def check_if_image_is_valid(request):
+    from werkzeug.utils import secure_filename
+    from google.cloud import storage
+
+    bucket_name='images_gym2'
+
+    def generate_public_url(blob_name):
+        return f"https://storage.googleapis.com/{bucket_name}/{blob_name}"
+
     if 'image_file' not in request.files and 'image' not in request.files:
         return 'No file part', 400
 
@@ -47,11 +56,17 @@ def check_if_image_is_valid(request):
         return 'No selected file', 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        path = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(path)
-        return filename
+
+        storage_client = storage.Client.from_service_account_json(r'C:\Users\hrist\OneDrive\Desktop\gcs_key\test-data-engineer-382010-ebd224901962.json')
+        bucket = storage_client.get_bucket(bucket_name)
+        blob = bucket.blob(filename)
+        blob.upload_from_file(file)
+
+        # return the public url
+        return generate_public_url(filename)
     else:
         return False
+
 
 
 def send_registration_email(recipient):

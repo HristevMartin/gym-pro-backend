@@ -36,7 +36,8 @@ with app.app_context():
     from db_models.Equipment import GymItem
     from db_models.users import User,UserProfile
     from db_models.token import Token
-
+    from db_models.forum import Forum, View
+    from db_models.forum import Reaction
     db.create_all()
 
 # Import your routes here
