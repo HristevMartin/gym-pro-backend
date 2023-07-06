@@ -72,7 +72,7 @@ class Reaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     emoji = db.Column(db.String(10), nullable=False)
 
-    comment = db.relationship('Comment', backref=db.backref('reactions', lazy=True))
+    comment = db.relationship('Comment', backref=db.backref('reactions',cascade="all,delete", lazy=True))
     user = db.relationship('User', backref=db.backref('reactions', lazy=True))
 
 

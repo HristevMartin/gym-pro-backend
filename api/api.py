@@ -407,6 +407,7 @@ def get_forum_message(forum_id):
     user_id = g.flask_httpauth_user.id
 
     forum = Forum.query.get(forum_id)
+
     if request.method == 'GET':
         if forum:
             existing_view = View.query.filter_by(user_id=user_id, forum_id=forum_id).first()
@@ -424,7 +425,6 @@ def get_forum_message(forum_id):
                 Forum.query.filter_by(id=forum_id).update({'views': Forum.views + 1})
                 db.session.commit()
         forum_data = forum.to_dict()
-        print(forum_data)
         return jsonify(forum_data), 200
 
 
@@ -437,6 +437,7 @@ def get_forum_messages(forum_id):
         return 'Forum post not found', 404
 
     forum_messages = forum.comments
+    # print('forum messages', forum_messages[0].to_dict())
 
     return [x.to_dict() for x in forum_messages], 200
 
@@ -542,3 +543,15 @@ def edit_delete_comment(comment_id):
         db.session.commit()
         return jsonify({
             'message': 'Comment deleted'}), 200
+
+@register_route.route('/delete_comment/<int:comment_id>', methods=['DELETE'])
+def delete_comment(comment_id):
+    delete_comment = Comment.query.get(comment_id)
+    if delete_comment:
+        db.session.delete(delete_comment)
+        db.session.commit()
+        return jsonify({
+            'message': 'Comment deleted'}), 200
+    else:
+        return jsonify({
+            'message': 'Comment not found'}), 404
