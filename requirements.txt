@@ -16,6 +16,7 @@ Flask-Uploads==0.2.1
 google-api-core==2.11.0
 google-api-python-client==2.87.0
 google-auth==2.19.0
+google-cloud-storage==1.42.0
 google-auth-httplib2==0.1.0
 google-auth-oauthlib==1.0.0
 googleapis-common-protos==1.59.0
