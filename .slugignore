@@ -8,6 +8,4 @@ database.db
 db/
 gym_db.sqlite
 .gym_db.sqlite/
-
-# ignore the sqlite default database
 *.sqlite3
