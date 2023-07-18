@@ -71,6 +71,7 @@ def home():
 @auth.login_required
 def gym_items():
     user_id = g.flask_httpauth_user.id
+
     filename = check_if_image_is_valid(request)
     if filename:
         data = request.form.to_dict()
@@ -94,6 +95,26 @@ def gym_items():
 
 @register_route.route('/all-gym-items')
 def all_gym_items():
+
+    project = request.args.get('project')
+
+    if project != 'local':
+        gym_items = GymItem.query.all()
+        gym_items_list = []
+        for gym_item in gym_items:
+            gym_item_dict = {
+                'primary_id': gym_item.id,
+                'id': gym_item.user_id,
+                'item_id': gym_item.item_id,
+                'name': gym_item.name,
+                'category': gym_item.category,
+                'price': gym_item.price,
+                'image_url': gym_item.image_url,
+                'image_url_path': gym_item.image_url_path,
+            }
+            gym_items_list.append(gym_item_dict)
+        return jsonify(gym_items_list), 200
+
     gym_items = GymItem.query.all()
     gym_items_list = []
     for gym_item in gym_items:
@@ -109,7 +130,6 @@ def all_gym_items():
         }
         gym_items_list.append(gym_item_dict)
     return jsonify(gym_items_list), 200
-
 
 @register_route.route('/get-user-item')
 @auth.login_required
