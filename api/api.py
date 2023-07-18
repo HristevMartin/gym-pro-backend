@@ -3,7 +3,7 @@ from flask import g, Blueprint, render_template
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
-
+from argparse import ArgumentParser
 from app import db, app
 from db_models.Equipment import GymItem
 from db_models.forum import Forum, Reaction, View, Comment
