@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f633a01b-432e-4c48-8610-bfca2645c069" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e5b38869-05db-4852-a5a3-739e3c558494.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e5b38869-05db-4852-a5a3-739e3c558494.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_models/Equipment.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_models/Equipment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_models/forum.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_models/forum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym_db.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/gym_db.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,28 +49,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/hrist/PycharmProjects/flaskProject28",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hrist/PycharmProjects/flaskProject28&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite",
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;,
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\hrist\PycharmProjects\flaskProject28" />
@@ -123,12 +128,12 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="FRONTEND_URL" value="http://127.0.0.1:5000" />
+        <env name="FRONTEND_URL" value="" />
         <env name="project" value="local" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\hrist\PycharmProjects\flaskProject28\venv\Scripts\python.exe" />
       <option name="SDK_NAME" value="Python 3.10 (flaskProject28)" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -221,6 +226,12 @@
       <workItem from="1689246086975" duration="5886000" />
       <workItem from="1689663983699" duration="63000" />
       <workItem from="1689664090453" duration="10172000" />
+      <workItem from="1689681349267" duration="5065000" />
+      <workItem from="1690037802754" duration="597000" />
+      <workItem from="1690196914717" duration="613000" />
+      <workItem from="1690358511132" duration="5246000" />
+      <workItem from="1690408823674" duration="1609000" />
+      <workItem from="1690460308043" duration="2641000" />
     </task>
     <servers />
   </component>
@@ -242,30 +253,25 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/api/api.py</url>
-          <line>381</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/utils/helper.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/api.py</url>
-          <line>379</line>
-          <option name="timeStamp" value="2" />
+          <line>97</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/api.py</url>
-          <line>377</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/api/api.py</url>
-          <line>376</line>
-          <option name="timeStamp" value="4" />
+          <line>72</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/flaskProject28$api.coverage" NAME="api Coverage Results" MODIFIED="1687097679220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
-    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1689672694276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1690488919567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

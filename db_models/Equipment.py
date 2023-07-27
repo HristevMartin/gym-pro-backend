@@ -14,3 +14,6 @@ class GymItem(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     item_id = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=True)
+    seller = db.Column(db.String(255), nullable=True)
+    quantity = db.Column(db.Integer, nullable=True)
+    location = db.Column(db.String(255), nullable=True)

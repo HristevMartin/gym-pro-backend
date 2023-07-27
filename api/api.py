@@ -92,6 +92,14 @@ def gym_items():
     else:
         return 'problem when creating the gym item', 400
 
+@register_route.route('/single-gym-item/<item_id>', methods=['GET'])
+def get_single_gym_item(item_id):
+
+    gym_item = GymItem.query.filter_by(item_id=item_id).first()
+    gym_item_dict = {
+        'image_url_path': gym_item.image_url_path,
+    }
+    return jsonify(gym_item_dict), 200
 
 @register_route.route('/all-gym-items')
 def all_gym_items():
@@ -209,6 +217,9 @@ def item_detail(item_id):
             'image_url': item.image_url,
             'description': item.description,
             'image_url_path': item.image_url_path,
+            'seller': item.seller,
+            'quantity': item.quantity,
+            'location': item.location
         }
         return jsonify(item_dict), 200
 
@@ -541,6 +552,13 @@ def save_comment(forum_id):
         db.session.add(saved_data)
         try:
             db.session.commit()
+
+            # Increment the comment count for the corresponding forum
+            forum = Forum.query.filter_by(id=1).first()
+            forum.comments_num += 1
+            db.session.add(forum)
+            db.session.commit()
+
             return jsonify({
                 'message': 'Comment created'}), 201
         except Exception as ex:

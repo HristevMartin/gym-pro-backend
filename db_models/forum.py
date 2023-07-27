@@ -23,6 +23,7 @@ class Forum(db.Model):
         self.user_id = user_id
 
     def to_dict(self):
+        print('show me the comments num', self.comments_num)
         return {
             'id': self.id,
             'title': self.title,
