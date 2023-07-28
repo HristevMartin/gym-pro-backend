@@ -119,6 +119,7 @@ def all_gym_items():
                 'price': gym_item.price,
                 'image_url': gym_item.image_url,
                 'image_url_path': gym_item.image_url_path,
+                'location': gym_item.location,
             }
             gym_items_list.append(gym_item_dict)
         return jsonify(gym_items_list), 200
@@ -545,6 +546,14 @@ def save_comment(forum_id):
     user_id = g.flask_httpauth_user.id
 
     if request.method == 'POST':
+        # increment comments count by 1
+        forum = Forum.query.filter_by(id=forum_id).first()
+
+        forum.comments_num = len(Comment.query.filter_by(forum_id=forum_id).all()) + 1
+
+        db.session.add(forum)
+        db.session.commit()
+
         data = request.get_json()
         data['user_id'] = user_id
         data['forum_id'] = forum_id
@@ -554,14 +563,12 @@ def save_comment(forum_id):
             db.session.commit()
 
             # Increment the comment count for the corresponding forum
-            forum = Forum.query.filter_by(id=1).first()
-            forum.comments_num += 1
-            db.session.add(forum)
-            db.session.commit()
+
 
             return jsonify({
                 'message': 'Comment created'}), 201
         except Exception as ex:
+            print('show me the ex', ex)
             return jsonify({
                 'message': 'Problem when creating the comment'}), 400
 
