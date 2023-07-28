@@ -38,6 +38,9 @@ with app.app_context():
     from db_models.token import Token
     from db_models.forum import Forum, View
     from db_models.forum import Reaction
+    from db_models.forum import Comment
+
+    db.drop_all()
     db.create_all()
 
 # Import your routes here
