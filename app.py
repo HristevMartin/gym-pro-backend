@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SENDGRID_API_KEY'] = os.getenv('SENDGRID_API_KEY')
 sendgrid_client = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
 
-CORS(app, resources={r"/*": {"origins": "https://pro-gym-4285b.web.app"}})
+CORS(app,  supports_credentials=True)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
