@@ -10,12 +10,11 @@ app = Flask(__name__)
 app.config['SENDGRID_API_KEY'] = os.getenv('SENDGRID_API_KEY')
 sendgrid_client = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://pro-gym-4285b.web.app"}})
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db_path = os.path.join(os.path.dirname(__file__), 'gym_db.sqlite')
-
 
 user = "ntteysrntcytty"
 password = "f3812e664af15485e07bf8c8ece1e083be47fe347d29eaa682da761d78aa9ae4"
