@@ -43,6 +43,7 @@ with app.app_context():
 # Import your routes here
 from api.api import register_route
 
+
 # Register your routes with the Flask app
 app.register_blueprint(register_route)
 
