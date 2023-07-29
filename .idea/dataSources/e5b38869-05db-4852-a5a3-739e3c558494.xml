@@ -1432,340 +1432,369 @@
     </table>
     <table id="509" parent="173" name="token"/>
     <table id="510" parent="173" name="user"/>
-    <table id="511" parent="173" name="user_profiles"/>
-    <table id="512" parent="173" name="views"/>
-    <column id="513" parent="504" name="id">
+    <table id="511" parent="173" name="user_activity"/>
+    <table id="512" parent="173" name="user_profiles"/>
+    <table id="513" parent="173" name="views"/>
+    <column id="514" parent="504" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="514" parent="504" name="content">
+    <column id="515" parent="504" name="content">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="515" parent="504" name="user_id">
+    <column id="516" parent="504" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="516" parent="504" name="forum_id">
+    <column id="517" parent="504" name="forum_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <foreign-key id="517" parent="504">
+    <foreign-key id="518" parent="504">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <foreign-key id="518" parent="504">
+    <foreign-key id="519" parent="504">
       <ColNames>forum_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>forum</RefTableName>
     </foreign-key>
-    <key id="519" parent="504">
+    <key id="520" parent="504">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="520" parent="505" name="id">
+    <column id="521" parent="505" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="521" parent="505" name="title">
+    <column id="522" parent="505" name="title">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="522" parent="505" name="description">
+    <column id="523" parent="505" name="description">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="523" parent="505" name="views">
+    <column id="524" parent="505" name="views">
       <DasType>INTEGER|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="524" parent="505" name="likes">
+    <column id="525" parent="505" name="likes">
       <DasType>INTEGER|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="525" parent="505" name="comments_num">
+    <column id="526" parent="505" name="comments_num">
       <DasType>INTEGER|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="526" parent="505" name="user_id">
+    <column id="527" parent="505" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
     </column>
-    <foreign-key id="527" parent="505">
+    <foreign-key id="528" parent="505">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <key id="528" parent="505">
+    <key id="529" parent="505">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="529" parent="506" name="id">
+    <column id="530" parent="506" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="530" parent="506" name="name">
+    <column id="531" parent="506" name="name">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="531" parent="506" name="category">
+    <column id="532" parent="506" name="category">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="532" parent="506" name="price">
+    <column id="533" parent="506" name="price">
       <DasType>FLOAT|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="533" parent="506" name="image_url">
+    <column id="534" parent="506" name="image_url">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="534" parent="506" name="image_url_path">
+    <column id="535" parent="506" name="image_url_path">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="535" parent="506" name="user_id">
+    <column id="536" parent="506" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="536" parent="506" name="item_id">
+    <column id="537" parent="506" name="item_id">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>8</Position>
     </column>
-    <column id="537" parent="506" name="description">
+    <column id="538" parent="506" name="description">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>9</Position>
     </column>
-    <column id="538" parent="506" name="seller">
+    <column id="539" parent="506" name="seller">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>10</Position>
     </column>
-    <column id="539" parent="506" name="quantity">
+    <column id="540" parent="506" name="quantity">
       <DasType>INTEGER|0s</DasType>
       <Position>11</Position>
     </column>
-    <column id="540" parent="506" name="location">
+    <column id="541" parent="506" name="location">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>12</Position>
     </column>
-    <foreign-key id="541" parent="506">
+    <foreign-key id="542" parent="506">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <index id="542" parent="506" name="sqlite_autoindex_gym_items_1">
+    <index id="543" parent="506" name="sqlite_autoindex_gym_items_1">
       <ColNames>item_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="543" parent="506">
+    <key id="544" parent="506">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="544" parent="506">
+    <key id="545" parent="506">
       <ColNames>item_id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_gym_items_1</UnderlyingIndexName>
     </key>
-    <column id="545" parent="507" name="id">
+    <column id="546" parent="507" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="546" parent="507" name="comment_id">
+    <column id="547" parent="507" name="comment_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="547" parent="507" name="user_id">
+    <column id="548" parent="507" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="548" parent="507" name="emoji">
+    <column id="549" parent="507" name="emoji">
       <DasType>VARCHAR(10)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <foreign-key id="549" parent="507">
+    <foreign-key id="550" parent="507">
       <ColNames>comment_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>comment</RefTableName>
     </foreign-key>
-    <foreign-key id="550" parent="507">
+    <foreign-key id="551" parent="507">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <key id="551" parent="507">
+    <key id="552" parent="507">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="552" parent="508" name="type">
+    <column id="553" parent="508" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="553" parent="508" name="name">
+    <column id="554" parent="508" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="554" parent="508" name="tbl_name">
+    <column id="555" parent="508" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="555" parent="508" name="rootpage">
+    <column id="556" parent="508" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="556" parent="508" name="sql">
+    <column id="557" parent="508" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="557" parent="509" name="id">
+    <column id="558" parent="509" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="558" parent="509" name="token">
+    <column id="559" parent="509" name="token">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="559" parent="509" name="user_id">
+    <column id="560" parent="509" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="560" parent="509" name="role">
+    <column id="561" parent="509" name="role">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="561" parent="509" name="expiration_time">
+    <column id="562" parent="509" name="expiration_time">
       <DasType>DATETIME|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <index id="562" parent="509" name="sqlite_autoindex_token_1">
+    <index id="563" parent="509" name="sqlite_autoindex_token_1">
       <ColNames>token</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="563" parent="509">
+    <key id="564" parent="509">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="564" parent="509">
+    <key id="565" parent="509">
       <ColNames>token</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_token_1</UnderlyingIndexName>
     </key>
-    <column id="565" parent="510" name="id">
+    <column id="566" parent="510" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="566" parent="510" name="email">
+    <column id="567" parent="510" name="email">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="567" parent="510" name="password">
+    <column id="568" parent="510" name="password">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="568" parent="510" name="role">
+    <column id="569" parent="510" name="role">
       <DasType>VARCHAR(8)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="569" parent="510" name="image_url">
+    <column id="570" parent="510" name="image_url">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>5</Position>
     </column>
-    <index id="570" parent="510" name="sqlite_autoindex_user_1">
+    <index id="571" parent="510" name="sqlite_autoindex_user_1">
       <ColNames>email</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="571" parent="510">
+    <key id="572" parent="510">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="572" parent="510">
+    <key id="573" parent="510">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_user_1</UnderlyingIndexName>
     </key>
-    <column id="573" parent="511" name="id">
+    <column id="574" parent="511" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="574" parent="511" name="name">
-      <DasType>VARCHAR(100)|0s</DasType>
+    <column id="575" parent="511" name="user_id">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="575" parent="511" name="location">
-      <DasType>VARCHAR(100)|0s</DasType>
+    <column id="576" parent="511" name="login_time">
+      <DasType>DATETIME|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="576" parent="511" name="hobby">
-      <DasType>VARCHAR(100)|0s</DasType>
+    <column id="577" parent="511" name="logout_time">
+      <DasType>DATETIME|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="577" parent="511" name="user_id">
-      <DasType>INTEGER|0s</DasType>
-      <Position>5</Position>
-    </column>
-    <column id="578" parent="511" name="image_filename">
-      <DasType>VARCHAR(255)|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <key id="579" parent="511">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="580" parent="512" name="user_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="581" parent="512" name="forum_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <foreign-key id="582" parent="512">
+    <foreign-key id="578" parent="511">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <foreign-key id="583" parent="512">
+    <key id="579" parent="511">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="580" parent="512" name="id">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="581" parent="512" name="name">
+      <DasType>VARCHAR(100)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="582" parent="512" name="location">
+      <DasType>VARCHAR(100)|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="583" parent="512" name="hobby">
+      <DasType>VARCHAR(100)|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <column id="584" parent="512" name="user_id">
+      <DasType>INTEGER|0s</DasType>
+      <Position>5</Position>
+    </column>
+    <column id="585" parent="512" name="image_filename">
+      <DasType>VARCHAR(255)|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <key id="586" parent="512">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="587" parent="513" name="user_id">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="588" parent="513" name="forum_id">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="589" parent="513">
+      <ColNames>user_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>user</RefTableName>
+    </foreign-key>
+    <foreign-key id="590" parent="513">
       <ColNames>forum_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>forum</RefTableName>
     </foreign-key>
-    <index id="584" parent="512" name="sqlite_autoindex_views_1">
+    <index id="591" parent="513" name="sqlite_autoindex_views_1">
       <ColNames>user_id
 forum_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="585" parent="512">
+    <key id="592" parent="513">
       <ColNames>user_id
 forum_id</ColNames>
       <Primary>1</Primary>

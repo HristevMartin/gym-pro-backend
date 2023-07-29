@@ -3,12 +3,12 @@ from flask import g, Blueprint, render_template
 from flask import send_from_directory
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
-from argparse import ArgumentParser
+
 from app import db, app
 from db_models.Equipment import GymItem
 from db_models.forum import Forum, Reaction, View, Comment
 from db_models.token import Token
-from db_models.users import User, UserProfile
+from db_models.users import User, UserProfile, UserActivity
 from managers.auth import AuthManager, auth
 from managers.user import verify_user
 from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id, \
@@ -42,7 +42,20 @@ def register_user():
 def login_user():
     user, user_id = verify_user()
     token = AuthManager.encode_token(user)
+
+    from datetime import datetime
+
+    login_time = datetime.now()
+
+    # Create a new UserActivity record for login
+    activity = UserActivity(user_id=user_id, login_time=login_time)
+    db.session.add(activity)
+    db.session.commit()
+
     return jsonify({"token": token, "_id": user_id}), 200
+
+
+from datetime import datetime
 
 
 @register_route.route('/logout')
@@ -51,14 +64,26 @@ def user_logout():
     token_db = Token.query.filter_by(token=token).first()
 
     if token_db:
-        db.session.delete(token_db)
-        try:
-            db.session.commit()
-            return 'User Deleted', 204
-        except Exception as ex:
-            return 'problem when deleting the token', 400
+        user_id = token_db.user_id
+
+        latest_activity = UserActivity.query.filter_by(user_id=user_id, logout_time=None).order_by(
+            UserActivity.login_time.desc()).first()
+
+        if latest_activity:
+            logout_time = datetime.now()
+
+            latest_activity.logout_time = logout_time
+
+            try:
+                db.session.delete(token_db)
+                db.session.commit()
+                return 'User logged out successfully', 204
+            except Exception as ex:
+                return 'Problem when logging out', 500
+        else:
+            return 'User is not currently active', 404
     else:
-        return 'problem when deleting the token', 204
+        return 'Invalid token', 401
 
 
 @register_route.route('/home')
@@ -92,18 +117,18 @@ def gym_items():
     else:
         return 'problem when creating the gym item', 400
 
+
 @register_route.route('/single-gym-item/<item_id>', methods=['GET'])
 def get_single_gym_item(item_id):
-
     gym_item = GymItem.query.filter_by(item_id=item_id).first()
     gym_item_dict = {
         'image_url_path': gym_item.image_url_path,
     }
     return jsonify(gym_item_dict), 200
 
+
 @register_route.route('/all-gym-items')
 def all_gym_items():
-
     project = request.args.get('project')
 
     if project != 'local':
@@ -139,6 +164,7 @@ def all_gym_items():
         }
         gym_items_list.append(gym_item_dict)
     return jsonify(gym_items_list), 200
+
 
 @register_route.route('/get-user-item')
 @auth.login_required
@@ -564,7 +590,6 @@ def save_comment(forum_id):
 
             # Increment the comment count for the corresponding forum
 
-
             return jsonify({
                 'message': 'Comment created'}), 201
         except Exception as ex:
@@ -589,6 +614,7 @@ def edit_delete_comment(comment_id):
         return jsonify({
             'message': 'Comment deleted'}), 200
 
+
 @register_route.route('/delete_comment/<int:comment_id>', methods=['DELETE'])
 def delete_comment(comment_id):
     delete_comment = Comment.query.get(comment_id)
@@ -600,3 +626,50 @@ def delete_comment(comment_id):
     else:
         return jsonify({
             'message': 'Comment not found'}), 404
+
+
+@register_route.route('/get-active-users', methods=['GET'])
+def get_active_users():
+    from datetime import datetime, timedelta
+    # Get the current time
+    current_time = datetime.now()
+
+    # Define a time threshold for considering users active (e.g., logged in within the last 15 minutes)
+    active_threshold = timedelta(minutes=15)
+
+    # Query the UserActivity model to get active users within the threshold
+    active_users_activities = UserActivity.query.filter(UserActivity.login_time >= current_time - active_threshold, UserActivity.logout_time == None).all()
+
+    print('active_users_activities', active_users_activities)
+    # Extract the user IDs of active users
+    active_user_ids = list(set([activity for activity in active_users_activities]))
+
+
+    user_profile_pictures = {user.user_id: user.image_filename for user in UserProfile.query.all()}
+
+    print('user_profile_pictures', user_profile_pictures)
+
+    user_profiles_list = []
+
+    for user_data in active_user_ids:
+        user_info = {}
+        user_id = user_data.user_id
+        if user_id in user_profile_pictures:
+            user_info['user_image'] = user_profile_pictures[user_id]
+        else:
+            user_info['user_image'] = None
+
+        users = User.query.filter(User.id.in_([x.user_id for x in active_user_ids])).all()
+
+        for user in users:
+            if user.id == user_id:
+                user.email = user.email.split('@')[0]
+                user_info['user_name'] = user.email
+        user_profiles_list.append(user_info)
+
+    if len(user_profiles_list) == 0:
+        return jsonify({
+            'message': 'No active users found'
+        }), 404
+
+    return jsonify(user_profiles_list), 200
