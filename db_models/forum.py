@@ -8,7 +8,7 @@ class Forum(db.Model):
     # create primary key
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(2048), nullable=False)
     views = db.Column(db.Integer, default=0)
     likes = db.Column(db.Integer, default=0)
     comments_num = db.Column(db.Integer, default=0)
@@ -38,7 +38,7 @@ class Forum(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.String(2048), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     forum_id = db.Column(db.Integer, db.ForeignKey('forum.id'), nullable=False)
 
