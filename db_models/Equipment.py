@@ -49,5 +49,5 @@ class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     comment_id = db.Column(db.String(255), nullable=False)
     like_count = db.Column(db.Integer, default=0)
-    item_id = db.Column(db.Integer, db.ForeignKey('gym_items.id'), nullable=False)
+    item_id = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
