@@ -29,7 +29,7 @@ class Rating(db.Model):
     __tablename__ = "rating"
 
     id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.String, db.ForeignKey('gym_items.id'), nullable=False)  # set as ForeignKey
+    item_id = db.Column(db.Integer, db.ForeignKey('gym_items.id'), nullable=False)  # set as ForeignKey
     user_id = db.Column(db.Integer, db.ForeignKey('user.id') ,nullable=False)
     star_rating = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
