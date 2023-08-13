@@ -789,7 +789,8 @@ def save_rating():
     except Exception as e:
         return jsonify({'message': 'An error occurred while saving the rating.', 'error': str(e)}), 500
 
-from sqlalchemy import func
+from sqlalchemy import func, text
+
 
 @register_route.route('/get-ratings/<item_id>', methods=['GET'])
 @auth.login_required
