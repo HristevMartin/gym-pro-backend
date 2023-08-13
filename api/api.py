@@ -383,7 +383,7 @@ def forgot_password():
 
 import os
 
-frontend_host = os.environ.get('FRONTEND_URL')
+frontend_host = os.environ.get('FRONTEND_URL', 'none')
 frontend_url = frontend_host + '/login'
 
 

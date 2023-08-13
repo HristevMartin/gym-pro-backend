@@ -1444,7 +1444,7 @@
       <Position>1</Position>
     </column>
     <column id="518" parent="504" name="content">
-      <DasType>VARCHAR(255)|0s</DasType>
+      <DasType>VARCHAR(2048)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
@@ -1517,7 +1517,7 @@
       <Position>2</Position>
     </column>
     <column id="533" parent="506" name="description">
-      <DasType>VARCHAR(255)|0s</DasType>
+      <DasType>VARCHAR(2048)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
@@ -1666,7 +1666,7 @@
       <Position>1</Position>
     </column>
     <column id="566" parent="509" name="item_id">
-      <DasType>INTEGER|0s</DasType>
+      <DasType>VARCHAR|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>

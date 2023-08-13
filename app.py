@@ -4,6 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sendgrid import SendGridAPIClient
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
@@ -12,7 +13,6 @@ sendgrid_client = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
 
 CORS(app,  supports_credentials=True)
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db_path = os.path.join(os.path.dirname(__file__), 'gym_db.sqlite')
 
@@ -28,8 +28,11 @@ else:
     db_uri = f"postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 with app.app_context():
     from db_models.Equipment import GymItem
@@ -40,7 +43,8 @@ with app.app_context():
     from db_models.forum import Comment
     from db_models.users import UserActivity
     from db_models.Equipment import Rating, CommentItem, Like
-    db.create_all()
+    # db.create_all()
+    db.drop_all()
 # Import your routes here
 from api.api import register_route
 
