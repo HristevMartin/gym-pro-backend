@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f633a01b-432e-4c48-8610-bfca2645c069" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e5b38869-05db-4852-a5a3-739e3c558494.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e5b38869-05db-4852-a5a3-739e3c558494.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_models/Equipment.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_models/Equipment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gym_db.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/gym_db.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -255,7 +252,7 @@
       <workItem from="1691742027595" duration="3986000" />
       <workItem from="1691787943192" duration="1045000" />
       <workItem from="1691831016524" duration="4555000" />
-      <workItem from="1691936121504" duration="12544000" />
+      <workItem from="1691936121504" duration="12859000" />
     </task>
     <servers />
   </component>
@@ -301,6 +298,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/flaskProject28$api.coverage" NAME="api Coverage Results" MODIFIED="1687097679220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
-    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1691950427855" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1691950687339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
