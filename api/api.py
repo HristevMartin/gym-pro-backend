@@ -447,6 +447,7 @@ def get_users():
         return jsonify(forum_data), 200
     elif request.method == 'POST':
         data = request.get_json()
+        print(f"Received payload: {data}")
         forum = Forum(
             title=data['title'],
             description=data['description'],
