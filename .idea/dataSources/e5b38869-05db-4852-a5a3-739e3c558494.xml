@@ -1685,248 +1685,243 @@
       <Position>5</Position>
     </column>
     <foreign-key id="570" parent="509">
-      <ColNames>item_id</ColNames>
-      <RefColNames>id</RefColNames>
-      <RefTableName>gym_items</RefTableName>
-    </foreign-key>
-    <foreign-key id="571" parent="509">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <index id="572" parent="509" name="sqlite_autoindex_rating_1">
+    <index id="571" parent="509" name="sqlite_autoindex_rating_1">
       <ColNames>user_id
 item_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="573" parent="509">
+    <key id="572" parent="509">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="574" parent="509" name="_user_gym_item_uc">
+    <key id="573" parent="509" name="_user_gym_item_uc">
       <ColNames>user_id
 item_id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_rating_1</UnderlyingIndexName>
     </key>
-    <column id="575" parent="510" name="id">
+    <column id="574" parent="510" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="576" parent="510" name="comment_id">
+    <column id="575" parent="510" name="comment_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="577" parent="510" name="user_id">
+    <column id="576" parent="510" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="578" parent="510" name="emoji">
+    <column id="577" parent="510" name="emoji">
       <DasType>VARCHAR(10)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <foreign-key id="579" parent="510">
+    <foreign-key id="578" parent="510">
       <ColNames>comment_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>comment</RefTableName>
     </foreign-key>
-    <foreign-key id="580" parent="510">
+    <foreign-key id="579" parent="510">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <key id="581" parent="510">
+    <key id="580" parent="510">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="582" parent="511" name="type">
+    <column id="581" parent="511" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="583" parent="511" name="name">
+    <column id="582" parent="511" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="584" parent="511" name="tbl_name">
+    <column id="583" parent="511" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="585" parent="511" name="rootpage">
+    <column id="584" parent="511" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="586" parent="511" name="sql">
+    <column id="585" parent="511" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="587" parent="512" name="id">
+    <column id="586" parent="512" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="588" parent="512" name="token">
+    <column id="587" parent="512" name="token">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="589" parent="512" name="user_id">
+    <column id="588" parent="512" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="590" parent="512" name="role">
+    <column id="589" parent="512" name="role">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="591" parent="512" name="expiration_time">
+    <column id="590" parent="512" name="expiration_time">
       <DasType>DATETIME|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <index id="592" parent="512" name="sqlite_autoindex_token_1">
+    <index id="591" parent="512" name="sqlite_autoindex_token_1">
       <ColNames>token</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="593" parent="512">
+    <key id="592" parent="512">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="594" parent="512">
+    <key id="593" parent="512">
       <ColNames>token</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_token_1</UnderlyingIndexName>
     </key>
-    <column id="595" parent="513" name="id">
+    <column id="594" parent="513" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="596" parent="513" name="email">
+    <column id="595" parent="513" name="email">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="597" parent="513" name="password">
+    <column id="596" parent="513" name="password">
       <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="598" parent="513" name="role">
+    <column id="597" parent="513" name="role">
       <DasType>VARCHAR(8)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="599" parent="513" name="image_url">
+    <column id="598" parent="513" name="image_url">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>5</Position>
     </column>
-    <index id="600" parent="513" name="sqlite_autoindex_user_1">
+    <index id="599" parent="513" name="sqlite_autoindex_user_1">
       <ColNames>email</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="601" parent="513">
+    <key id="600" parent="513">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="602" parent="513">
+    <key id="601" parent="513">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_user_1</UnderlyingIndexName>
     </key>
-    <column id="603" parent="514" name="id">
+    <column id="602" parent="514" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="604" parent="514" name="user_id">
+    <column id="603" parent="514" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="605" parent="514" name="login_time">
+    <column id="604" parent="514" name="login_time">
       <DasType>DATETIME|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="606" parent="514" name="logout_time">
+    <column id="605" parent="514" name="logout_time">
       <DasType>DATETIME|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="607" parent="514" name="last_seen">
+    <column id="606" parent="514" name="last_seen">
       <DasType>DATETIME|0s</DasType>
       <Position>5</Position>
     </column>
-    <foreign-key id="608" parent="514">
+    <foreign-key id="607" parent="514">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <key id="609" parent="514">
+    <key id="608" parent="514">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="610" parent="515" name="id">
+    <column id="609" parent="515" name="id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="611" parent="515" name="name">
+    <column id="610" parent="515" name="name">
       <DasType>VARCHAR(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="612" parent="515" name="location">
+    <column id="611" parent="515" name="location">
       <DasType>VARCHAR(100)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="613" parent="515" name="hobby">
+    <column id="612" parent="515" name="hobby">
       <DasType>VARCHAR(100)|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="614" parent="515" name="user_id">
+    <column id="613" parent="515" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="615" parent="515" name="image_filename">
+    <column id="614" parent="515" name="image_filename">
       <DasType>VARCHAR(255)|0s</DasType>
       <Position>6</Position>
     </column>
-    <key id="616" parent="515">
+    <key id="615" parent="515">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="617" parent="516" name="user_id">
+    <column id="616" parent="516" name="user_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="618" parent="516" name="forum_id">
+    <column id="617" parent="516" name="forum_id">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <foreign-key id="619" parent="516">
+    <foreign-key id="618" parent="516">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <foreign-key id="620" parent="516">
+    <foreign-key id="619" parent="516">
       <ColNames>forum_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>forum</RefTableName>
     </foreign-key>
-    <index id="621" parent="516" name="sqlite_autoindex_views_1">
+    <index id="620" parent="516" name="sqlite_autoindex_views_1">
       <ColNames>user_id
 forum_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="622" parent="516">
+    <key id="621" parent="516">
       <ColNames>user_id
 forum_id</ColNames>
       <Primary>1</Primary>
