@@ -42,7 +42,7 @@ class CommentItem(db.Model):
     content = db.Column(db.String(500), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    gym_id = db.Column(db.Integer, db.ForeignKey('gym_items.id'), nullable=False)
+    gym_id = db.Column(db.String, db.ForeignKey('gym_items.id'), nullable=False)
 
 class Like(db.Model):
     __tablename__ = "like_item"
