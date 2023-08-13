@@ -101,11 +101,16 @@ def send_registration_email(recipient):
 
 
 def send_reset_email(user, token):
+    project = os.getenv('project')
+
+    if project == 'production':
+        reset_url = f"https://pro-gym-4285b.web.app{url_for('register.reset_password', token=token)}"
+    else:
+        reset_url = url_for('register.reset_password', token=token, _external=True)
+
     sender = 'virtoala0@gmail.com'
     recipient = user.email
     subject = 'Reset Your Password'
-
-    reset_url = url_for('register.reset_password', token=token, _external=True)
 
     content = render_template('reset_password_email.html', reset_url=reset_url)
 
