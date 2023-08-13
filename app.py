@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db_path = os.path.join(os.path.dirname(__file__), 'gym_db.sqlite')
 
 user = "ntteysrntcytty"
-password = "f3812e664af15485e07bf8c8ece1e083be47fe347d29eaa682da761d78aa9ae4"
+password = "f3812e664af15485e07bf8c8ece1ese083be47fe347d29eaa682da761d78aa9ae4"
 host = "ec2-52-209-225-31.eu-west-1.compute.amazonaws.com"
 port = "5432"
 database = "divsatm96f70o"
@@ -39,7 +39,9 @@ with app.app_context():
     from db_models.forum import Reaction
     from db_models.forum import Comment
     from db_models.users import UserActivity
-    db.create_all()
+    from db_models.Equipment import Rating, CommentItem, Like
+    db.drop_all()
+    # db.create_all()
 
 # Import your routes here
 from api.api import register_route

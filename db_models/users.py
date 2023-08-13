@@ -11,8 +11,11 @@ class User(db.Model):
     role = db.Column(db.Enum(RoleType), default=RoleType.default, nullable=False)
     # create column in the user table to be optional for user profile image
     image_url = db.Column(db.String(255), nullable=True)
-
     gym_items = db.relationship('GymItem', backref='user')
+    ratings = db.relationship('Rating', backref='user')
+    comment_items = db.relationship('CommentItem', backref='user', lazy=True)
+
+
 
     def __to_dict__(self):
         return {
@@ -37,11 +40,13 @@ class UserActivity(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     login_time = db.Column(db.DateTime, nullable=False)
     logout_time = db.Column(db.DateTime)
+    last_seen = db.Column(db.DateTime)
 
-    def __init__(self, user_id, login_time, logout_time=None):
+    def __init__(self, user_id, login_time,last_seen, logout_time=None):
         self.user_id = user_id
         self.login_time = login_time
         self.logout_time = logout_time
+        self.last_seen = last_seen
 
     def __repr__(self):
         return f"<UserActivity id={self.id}, user_id={self.user_id}, login_time={self.login_time}, logout_time={self.logout_time}>"

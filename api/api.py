@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
 
 from app import db, app
-from db_models.Equipment import GymItem
+from db_models.Equipment import GymItem, Rating, CommentItem, Like
 from db_models.forum import Forum, Reaction, View, Comment
 from db_models.token import Token
 from db_models.users import User, UserProfile, UserActivity
@@ -33,7 +33,7 @@ def register_user():
         db.session.commit()
         send_registration_email(saved_data.email)
     except Exception as ex:
-        raise BadRequest("Please login")
+        return "Please login", 401
 
     return '', 201
 
@@ -48,7 +48,7 @@ def login_user():
     login_time = datetime.now()
 
     # Create a new UserActivity record for login
-    activity = UserActivity(user_id=user_id, login_time=login_time)
+    activity = UserActivity(user_id=user_id, login_time=login_time, last_seen=login_time)
     db.session.add(activity)
     db.session.commit()
 
@@ -212,6 +212,10 @@ def item_detail(item_id):
                     'image_url': updated_item.image_url,
                     'description': updated_item.description,
                     'image_url_path': updated_item.image_url_path,
+                    'seller': updated_item.seller,
+                    'quantity': updated_item.quantity,
+                    'location': updated_item.location,
+                    'mobile_number': updated_item.mobile_number,
 
                 }
             }), 200
@@ -246,7 +250,8 @@ def item_detail(item_id):
             'image_url_path': item.image_url_path,
             'seller': item.seller,
             'quantity': item.quantity,
-            'location': item.location
+            'location': item.location,
+            'mobile_number': item.mobile_number,
         }
         return jsonify(item_dict), 200
 
@@ -380,7 +385,6 @@ import os
 
 frontend_host = os.environ.get('FRONTEND_URL')
 frontend_url = frontend_host + '/login'
-app.logger.info(f'show me the frontend urlllllllll: {frontend_url}')
 
 
 @register_route.route('/reset-password/<token>', methods=['GET', 'POST'])
@@ -484,20 +488,46 @@ def get_forum_message(forum_id):
                 db.session.commit()
         forum_data = forum.to_dict()
         return jsonify(forum_data), 200
+    elif request.method == 'PUT':
+        data = request.get_json()
+        forum.title = data['title']
+        forum.description = data['description']
+        db.session.commit()
+        return jsonify({
+            'message': 'Forum updated'}), 200
+    elif request.method == 'DELETE':
+        db.session.delete(forum)
+        db.session.commit()
+        return jsonify({
+            'message': 'Forum deleted'}), 200
 
 
-@register_route.route('/get_forum_messages/<forum_id>', methods=['GET'])
+@register_route.route('/get_forum_messages/<forum_id>', methods=['GET', 'DELETE'])
 def get_forum_messages(forum_id):
-    forum_id = forum_id
-    forum = Forum.query.get(forum_id)
+    if request.method == 'GET':
+        forum_id = forum_id
+        forum = Forum.query.get(forum_id)
 
-    if forum is None:
-        return 'Forum post not found', 404
+        if forum is None:
+            return 'Forum post not found', 404
 
-    forum_messages = forum.comments
-    # print('forum messages', forum_messages[0].to_dict())
+        forum_messages = forum.comments
+        # print('forum messages', forum_messages[0].to_dict())
 
-    return [x.to_dict() for x in forum_messages], 200
+        return [x.to_dict() for x in forum_messages], 200
+    elif request.method == 'DELETE':
+        forum = Forum.query.get(forum_id)
+        if forum is None:
+            return 'Forum not found', 404
+
+        forum_comments = forum.comments
+        for comment in forum_comments:
+            db.session.delete(comment)
+
+        db.session.commit()
+        return jsonify({
+            'message': 'Comments associated with the forum deleted'
+        }), 200
 
 
 @register_route.route('/save-emoji', methods=['POST'])
@@ -631,41 +661,31 @@ def delete_comment(comment_id):
 @register_route.route('/get-active-users', methods=['GET'])
 def get_active_users():
     from datetime import datetime, timedelta
-    # Get the current time
+
     current_time = datetime.now()
+    active_threshold = timedelta(hours=6)  # Changed from minutes to hours
 
-    # Define a time threshold for considering users active (e.g., logged in within the last 15 minutes)
-    active_threshold = timedelta(minutes=15)
+    active_users_activities = UserActivity.query.filter(UserActivity.last_seen >= current_time - active_threshold, UserActivity.logout_time == None).all()
 
-    # Query the UserActivity model to get active users within the threshold
-    active_users_activities = UserActivity.query.filter(UserActivity.login_time >= current_time - active_threshold, UserActivity.logout_time == None).all()
-
-    print('active_users_activities', active_users_activities)
-    # Extract the user IDs of active users
-    active_user_ids = list(set([activity for activity in active_users_activities]))
-
+    active_user_ids = list(set([activity.user_id for activity in active_users_activities]))
 
     user_profile_pictures = {user.user_id: user.image_filename for user in UserProfile.query.all()}
 
-    print('user_profile_pictures', user_profile_pictures)
-
     user_profiles_list = []
+
+    users = User.query.filter(User.id.in_(active_user_ids)).all()
 
     for user_data in active_user_ids:
         user_info = {}
-        user_id = user_data.user_id
-        if user_id in user_profile_pictures:
-            user_info['user_image'] = user_profile_pictures[user_id]
-        else:
-            user_info['user_image'] = None
+        user_id = user_data
 
-        users = User.query.filter(User.id.in_([x.user_id for x in active_user_ids])).all()
+        user_info['user_image'] = user_profile_pictures.get(user_id, None)
 
         for user in users:
             if user.id == user_id:
                 user.email = user.email.split('@')[0]
                 user_info['user_name'] = user.email
-        user_profiles_list.append(user_info)
+                user_profiles_list.append(user_info)
 
     if len(user_profiles_list) == 0:
         return jsonify({
@@ -673,3 +693,245 @@ def get_active_users():
         }), 404
 
     return jsonify(user_profiles_list), 200
+
+
+@register_route.route('/ping', methods=['POST'])
+@auth.login_required
+def ping():
+    # Identify the user
+    user_id = g.flask_httpauth_user.id
+    print('been here')
+    # Get the UserActivity record for this user
+    activity = UserActivity.query.filter_by(user_id=user_id).first()
+
+    # If there's no activity record for this user, something is wrong.
+    # In a production environment, you'd probably want to handle this case differently.
+    if not activity:
+        return jsonify({'error': 'No activity record found for this user'}), 404
+
+    # Update the last_seen time and commit the changes
+    activity.last_seen = datetime.now()
+    db.session.commit()
+
+    # Return a success status
+    return jsonify({'status': 'success'}), 200
+
+
+@register_route.route('/remove-emoji', methods=['POST'])
+@auth.login_required
+def remove_emoji():
+    user_id = g.flask_httpauth_user.id
+    try:
+        data = request.get_json()
+        id = data['id']
+        emoji = data['emoji']
+
+        reaction = Reaction.query.filter_by(
+            comment_id=id,
+            emoji=emoji,
+            user_id=user_id
+        ).first()
+
+        if not reaction:
+            return jsonify({'message': 'Reaction not found'}), 400
+
+        db.session.delete(reaction)
+        db.session.commit()
+
+        return jsonify({'message': 'Reaction removed successfully'}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Server error'}), 500
+
+
+@register_route.route('/save-rating', methods=['POST'])
+@auth.login_required
+def save_rating():
+    user_id = g.flask_httpauth_user.id
+    try:
+        # Get data from the request's JSON body
+        data = request.get_json()
+        if user_id:
+            data['user_email'] = User.query.filter_by(id=user_id).first().email
+
+        item_id = data['itemId']
+        star_rating = data['rating']
+
+        # Check if the user has already rated the item
+        existing_rating = Rating.query.filter_by(user_id=user_id, item_id=item_id).first()
+
+        if existing_rating:
+            if star_rating != existing_rating.star_rating:
+                # If there's an existing rating, update it
+                existing_rating.star_rating = star_rating
+                db.session.commit()
+                user_response = {
+                    'user_rating': existing_rating.star_rating,
+                    'user_id': user_id,
+                }
+                return jsonify(user_response), 200
+            elif star_rating == existing_rating.star_rating:
+                db.session.delete(existing_rating)
+                db.session.commit()
+
+                return jsonify({'message': 'Rating deleted successfully!'}), 204
+        else:
+            new_rating = Rating(user_id=user_id, item_id=item_id, star_rating=star_rating)
+            db.session.add(new_rating)
+            db.session.commit()
+            user_response = {
+                'user_rating': new_rating.star_rating,
+                'user_id': user_id,
+            }
+            return jsonify(user_response), 201
+
+    except Exception as e:
+        return jsonify({'message': 'An error occurred while saving the rating.', 'error': str(e)}), 500
+
+from sqlalchemy import func
+
+@register_route.route('/get-ratings/<item_id>', methods=['GET'])
+@auth.login_required
+def get_ratings(item_id):
+    try:
+        # Aggregate ratings for the given item_id
+        average_rating = db.session.query(func.avg(Rating.star_rating)).filter_by(item_id=item_id).scalar()
+        total_ratings = Rating.query.filter_by(item_id=item_id).count()
+
+        # If there's no rating, default average to 0
+        average_rating = float(average_rating) if average_rating else 0
+        user_rating = Rating.query.filter_by(item_id=item_id, user_id=g.flask_httpauth_user.id).first()
+
+        user_raiting = user_rating.star_rating if user_rating else 0
+
+        print('successfull', user_raiting)
+
+        item = {
+            'item_id': item_id,
+            'user_rating': user_raiting,
+            'average_rating': round(average_rating, 2),
+            'total_ratings': total_ratings
+        }
+        print('show me item', item)
+        return jsonify(item), 200
+
+    except Exception as e:
+        return jsonify({'message': 'An error occurred while fetching the ratings.', 'error': str(e)}), 500
+    
+@register_route.route('/save-comment', methods=['POST'])
+@auth.login_required
+def save_comment_item():
+    if request.method == 'POST':
+        user_id = g.flask_httpauth_user.id
+        data = request.get_json()
+        comment_content = data.get('comment')
+        item_id = data.get('itemId')
+
+        if not comment_content or not user_id:
+            return jsonify({"message": "Comment and UserID are required!"}), 400
+
+
+        new_comment = CommentItem(content=comment_content, user_id=user_id, gym_id=item_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return jsonify({"message": "Comment saved successfully!"}), 201
+
+
+@register_route.route('/get-comments/<item_id>', methods=['GET'])
+@auth.login_required
+def get_comments(item_id):
+    try:
+        comments = CommentItem.query.filter_by(gym_id=item_id).all()
+
+        if not comments:
+            return jsonify({"message": "No comments found!"}), 404
+
+        comments_list = []
+        for comment in comments:
+            comment_data = {}
+            comment_data['comment_id'] = comment.id
+            comment_data['comment'] = comment.content
+            comment_data['user_id'] = comment.user_id
+            comment_data['gym_id'] = comment.gym_id
+
+            comments_list.append(comment_data)
+
+        return jsonify({"comments": comments_list}), 200
+
+    except Exception as e:
+        return jsonify({'message': 'An error occurred while fetching the comments.', 'error': str(e)}), 500
+
+@register_route.route('/modify-comment/<comment_id>', methods=['PUT', 'DELETE'])
+@auth.login_required
+def modify_comment(comment_id):
+    if request.method == 'PUT':
+        user_id = g.flask_httpauth_user.id
+        data = request.get_json()
+        comment_content = data.get('edited_comment')
+        item_id = data.get('item_id')
+
+        if not comment_content or not user_id:
+            return jsonify({"message": "Comment and UserID are required!"}), 400
+
+        comment = CommentItem.query.filter_by(id=comment_id).first()
+
+        if not comment:
+            return jsonify({"message": "Comment not found!"}), 404
+
+        comment.content = comment_content
+        comment.user_id = user_id
+        comment.gym_id = item_id
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            return jsonify({"message": "An error occurred while updating the comment.", "error": str(e)}), 500
+        return jsonify({"message": comment.content}), 200
+    elif request.method == 'DELETE':
+        comment = CommentItem.query.filter_by(id=comment_id).first()
+
+        if not comment:
+            return jsonify({"message": "Comment not found!"}), 404
+
+        try:
+            db.session.delete(comment)
+            db.session.commit()
+
+            return jsonify({"message": "Comment deleted successfully!"}), 204
+        except Exception as e:
+            return jsonify({"message": "An error occurred while deleting the comment.", "error": str(e)}), 500
+
+@register_route.route('/likes/<comment_id>', methods=['GET', 'POST'])
+@auth.login_required
+def manage_likes(comment_id):
+    if request.method == 'GET':
+        comment_likes = Like.query.filter_by(comment_id=comment_id).all()
+
+        # Aggregate total likes
+        total_likes = sum([comment_like.like_count for comment_like in comment_likes])
+
+        user_has_liked = any(comment_like.user_id == g.flask_httpauth_user.id for comment_like in comment_likes)
+        print('show me user has liked', user_has_liked)
+        print('show me user_id', g.flask_httpauth_user.id)
+        return jsonify({"like_count": total_likes, "user_has_liked": user_has_liked})
+
+    elif request.method == 'POST':
+        user_id = g.flask_httpauth_user.id
+        data = request.get_json()
+        # Check if user has already liked the comment
+        existing_like = Like.query.filter_by(comment_id=comment_id, user_id=user_id).first()
+        if existing_like:
+            # If user has already liked the comment, unlike it
+            db.session.delete(existing_like)
+            db.session.commit()
+            total_like_per_comment = len([x.comment_id for x in Like.query.filter_by(comment_id=comment_id).all()])
+            return jsonify({"action": "unliked", "success": True, 'like_count': total_like_per_comment}), 200
+
+        else:
+            comment_like = Like(comment_id=comment_id, like_count=1, item_id=data['itemId'], user_id=user_id)
+            db.session.add(comment_like)
+            db.session.commit()
+            like_count = len([x.comment_id for x in Like.query.filter_by(comment_id=comment_id).all()])
+            return jsonify({"success": True, "like_count": like_count}), 201

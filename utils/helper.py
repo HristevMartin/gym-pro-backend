@@ -80,7 +80,7 @@ def check_if_image_is_valid(request):
 def send_registration_email(recipient):
     sender = 'virtoala0@gmail.com'
     subject = 'Welcome to Our App'
-    message = "Welcome to our gym app. We are glad to have you here. "
+    message = "Welcome to our gym hum marketplace. We are glad to have you here. "
 
     content = render_template('welcome_email.html', message=message)
 
