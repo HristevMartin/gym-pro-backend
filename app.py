@@ -42,8 +42,8 @@ with app.app_context():
     from db_models.forum import Comment
     from db_models.users import UserActivity
     from db_models.Equipment import Rating, CommentItem, Like
-    db.create_all()
-    # db.drop_all()
+    # db.create_all()
+    db.drop_all()
 
 # Import your routes here
 from api.api import register_route
