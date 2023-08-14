@@ -15,7 +15,7 @@ class Forum(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     user = db.relationship('User', backref=db.backref('forum_posts', lazy=True))
-    comments = db.relationship('Comment', backref='forum', lazy=True)
+    comments = db.relationship('Comment', backref='forum', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, title, description, user_id):
         self.title = title

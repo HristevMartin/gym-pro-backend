@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f633a01b-432e-4c48-8610-bfca2645c069" name="Changes" comment="" />
+    <list default="true" id="f633a01b-432e-4c48-8610-bfca2645c069" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gym_db.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/gym_db.sqlite" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,9 +124,8 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="FRONTEND_URL" value="http://localhost:3000" />
+        <env name="FRONTEND_URL" value="" />
         <env name="project" value="local" />
-        <env name="SENDGRID_API_KEY" value="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" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\hrist\PycharmProjects\flaskProject28\venv\Scripts\python.exe" />
       <option name="SDK_NAME" value="Python 3.10 (flaskProject28)" />
@@ -250,7 +252,8 @@
       <workItem from="1691742027595" duration="3986000" />
       <workItem from="1691787943192" duration="1045000" />
       <workItem from="1691831016524" duration="4555000" />
-      <workItem from="1691936121504" duration="16900000" />
+      <workItem from="1691936121504" duration="19033000" />
+      <workItem from="1692000479797" duration="345000" />
     </task>
     <servers />
   </component>
@@ -296,6 +299,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/flaskProject28$api.coverage" NAME="api Coverage Results" MODIFIED="1687097679220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
-    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1691953560951" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/flaskProject28$flaskProject28.coverage" NAME="flaskProject28 Coverage Results" MODIFIED="1692000499150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
