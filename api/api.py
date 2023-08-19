@@ -648,10 +648,18 @@ def edit_delete_comment(comment_id):
 
 @register_route.route('/delete_comment/<int:comment_id>', methods=['DELETE'])
 def delete_comment(comment_id):
+    forum_id = request.args.get('forum_id')
     delete_comment = Comment.query.get(comment_id)
+
     if delete_comment:
         db.session.delete(delete_comment)
         db.session.commit()
+
+        if forum_id:
+            forum = Forum.query.get(forum_id)
+            forum.comments_num -= 1
+            db.session.commit()
+
         return jsonify({
             'message': 'Comment deleted'}), 200
     else:
@@ -737,6 +745,9 @@ def remove_emoji():
             return jsonify({'message': 'Reaction not found'}), 400
 
         db.session.delete(reaction)
+
+        forum_likes = Forum.query.get(data['forum_id'])
+        forum_likes.likes -= 1
         db.session.commit()
 
         return jsonify({'message': 'Reaction removed successfully'}), 200
