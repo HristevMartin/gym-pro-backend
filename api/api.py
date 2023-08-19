@@ -497,15 +497,17 @@ def get_forum_message(forum_id):
         return jsonify({
             'message': 'Forum updated'}), 200
     elif request.method == 'DELETE':
+        if not forum:
+            return jsonify({"message": "Forum not found"}), 404
+
         view_delete = View.query.filter_by(forum_id=forum.id, user_id=user_id).first()
         if view_delete:
             db.session.delete(view_delete)
 
         db.session.delete(forum)
-        db.session.delete(view_delete)
         db.session.commit()
-        return jsonify({
-            'message': 'Forum deleted'}), 200
+
+        return jsonify({'message': 'Forum deleted'}), 200
 
 
 @register_route.route('/get_forum_messages/<forum_id>', methods=['GET', 'DELETE'])
