@@ -66,11 +66,10 @@ SQLAlchemy==2.0.12
 starkbank-ecdsa==2.2.0
 sympy==1.12
 tokenizers==0.13.3
-<<<<<<< HEAD
-=======
+
 torch==2.0.1
 torchvision==0.15.2
->>>>>>> 601a6fa75f632a94db30cb2c8c93de2751c10a6a
+
 tqdm==4.65.0
 transformers==4.29.2
 typing_extensions==4.5.0
