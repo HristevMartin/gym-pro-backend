@@ -1488,7 +1488,7 @@
       <Position>3</Position>
     </column>
     <column id="527" parent="505" name="gym_id">
-      <DasType>INTEGER|0s</DasType>
+      <DasType>VARCHAR|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
