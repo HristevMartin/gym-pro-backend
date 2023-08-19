@@ -661,8 +661,9 @@ def delete_comment(comment_id):
     if delete_comment:
         db.session.delete(delete_comment)
         db.session.commit()
-
+        print('show me the forum_IDDDDD', forum_id)
         if forum_id:
+            print('here')
             forum = Forum.query.get(forum_id)
             forum.comments_num -= 1
             db.session.commit()
