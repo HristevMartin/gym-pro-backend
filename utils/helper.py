@@ -40,7 +40,7 @@ def check_if_image_is_valid(request):
     from werkzeug.utils import secure_filename
     from google.cloud import storage
 
-    bucket_name = 'gym-image-bucket'
+    bucket_name = 'gymprobu'
 
     def generate_public_url(blob_name):
         return f"https://storage.googleapis.com/{bucket_name}/{blob_name}"
@@ -52,20 +52,19 @@ def check_if_image_is_valid(request):
 
     if file.filename == '':
         return 'No selected file', 400
+
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        service_account_info = os.environ.get('GCP_SERVICE_ACCOUNT')
+
         import json
         if os.getenv('project') == "local":
-            storage_client = storage.Client.from_service_account_json(
-                r'C:\Users\hrist\OneDrive\Desktop\gcp training\gym-website-393216-dc707085ff77.json')
-
-        # For production, decode the base64 string
+            service_account_path = r'C:\Users\hrist\OneDrive\Desktop\gcp training\compelling-muse-401714-52e01b7f32ec.json'
+            storage_client = storage.Client.from_service_account_json(service_account_path)
         else:
-            # service_account_info = json.loads(base64.b64decode(os.environ.get("GCP_SERVICE_ACCOUNT")).decode("utf-8"))
-            # storage_client = storage.Client.from_service_account_info(service_account_info)
-            service_account_info = json.loads(os.environ.get("GCP_SERVICE_ACCOUNT"))
-            storage_client = storage.Client.from_service_account_info(service_account_info)
+            # For production, decode the base64 string
+            service_account_info = os.environ.get('GCP_SERVICE_ACCOUNT')
+            service_account_json = json.loads(service_account_info)
+            storage_client = storage.Client.from_service_account_json(service_account_json)
 
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob(filename)

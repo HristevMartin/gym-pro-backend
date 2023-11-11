@@ -199,6 +199,7 @@ def item_detail(item_id):
                 data['image_url_path'] = filename
             else:
                 return jsonify({'failure': 'image is not valid'}), 400
+        data.pop('', None)
         GymItem.query.filter_by(item_id=item_id).update(data)
         try:
             db.session.commit()
