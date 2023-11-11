@@ -1,0 +1,12 @@
+steps:
+# Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA', '.']
+
+# Push the image to Google Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA']
+
+# Deploy the image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'gym-flask-pro', '--image', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA', '--region', 'europe-west1', '--platform', 'managed']

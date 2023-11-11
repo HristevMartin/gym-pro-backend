@@ -62,11 +62,11 @@ def check_if_image_is_valid(request):
 
         # For production, decode the base64 string
         else:
-            import base64
-            service_account_info = json.loads(base64.b64decode(os.environ.get("GCP_SERVICE_ACCOUNT")).decode("utf-8"))
+            # service_account_info = json.loads(base64.b64decode(os.environ.get("GCP_SERVICE_ACCOUNT")).decode("utf-8"))
+            # storage_client = storage.Client.from_service_account_info(service_account_info)
+            service_account_info = json.loads(os.environ.get("GCP_SERVICE_ACCOUNT"))
             storage_client = storage.Client.from_service_account_info(service_account_info)
-        # storage_client = storage.Client.from_service_account_json(
-        #     r'C:\Users\hrist\OneDrive\Desktop\gcp training\gym-website-393216-dc707085ff77.json')
+
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob(filename)
         blob.upload_from_file(file)
