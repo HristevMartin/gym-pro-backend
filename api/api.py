@@ -99,6 +99,7 @@ def gym_items():
 
     filename = check_if_image_is_valid(request)
     print('filename is', filename)
+    print('filename is2', filename)
     if filename:
         data = request.form.to_dict()
 
