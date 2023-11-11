@@ -98,6 +98,7 @@ def gym_items():
     user_id = g.flask_httpauth_user.id
 
     filename = check_if_image_is_valid(request)
+    print('filename is', filename)
     if filename:
         data = request.form.to_dict()
 
