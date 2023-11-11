@@ -87,7 +87,6 @@ def user_logout():
 
 
 @register_route.route('/home')
-@auth.login_required
 def home():
     return 'Home'
 

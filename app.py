@@ -23,7 +23,7 @@ database = os.environ.get('database')
 if os.getenv('project') == 'local':
     db_uri = 'sqlite:///{}'.format(db_path)
 else:
-    db_uri = f"postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require"
+    db_uri = 'sqlite:///{}'.format(db_path)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

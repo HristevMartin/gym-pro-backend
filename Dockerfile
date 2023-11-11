@@ -1,9 +1,4 @@
-FROM python:3.8-slim
-
-# Set environment variables
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=8080
+FROM python:3.8
 
 # Set the working directory in the container
 WORKDIR /app
@@ -20,5 +15,8 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8080
 
-# Specify the command to run on container start
-CMD ["flask", "run"]
+# Install a WSGI server, like gunicorn
+RUN pip install gunicorn
+
+# Start the application using a WSGI server
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
