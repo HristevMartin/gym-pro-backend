@@ -131,6 +131,7 @@ def gym_items():
             db.session.commit()
             return 'Gym Item created', 201
         except Exception as ex:
+            logging.error(f"Error while creating gym item: {ex}")
             return 'problem when creating the gym item', 400
     else:
         return 'problem when creating the gym item', 400

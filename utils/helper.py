@@ -47,6 +47,7 @@ def check_if_image_is_valid(request):
         return f"https://storage.googleapis.com/{bucket_name}/{blob_name}"
 
     if 'image_file' not in request.files and 'image' not in request.files:
+        logging.error("No image file found in the request")
         return 'No file part', 400
 
     file = request.files['image_file']
@@ -66,9 +67,16 @@ def check_if_image_is_valid(request):
             logging.info('been here')
             # For production, decode the base64 string
             service_account_info = os.environ.get('YOUR_ENV_VAR')
+            if not service_account_info:
+                logging.error("Service account info not found in environment")
+                return 'Configuration error', 500
 
-            service_account_json = json.loads(service_account_info)
-            storage_client = storage.Client.from_service_account_json(service_account_json)
+            try:
+                service_account_json = json.loads(service_account_info)
+                storage_client = storage.Client.from_service_account_json(service_account_json)
+            except json.JSONDecodeError as ex:
+                logging.error(f"Error decoding service account JSON: {ex}")
+                return 'Configuration error', 500
 
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob(filename)
@@ -77,6 +85,7 @@ def check_if_image_is_valid(request):
         # return the public url
         return generate_public_url(filename)
     else:
+        logging.error("Invalid file type")
         return False
 
 
