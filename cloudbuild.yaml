@@ -26,8 +26,8 @@ steps:
     args: ['run', 'deploy', 'gym-flask-pro',
            '--image', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA',
            '--region', 'europe-west1',
-           '--platform', 'managed',
-           '--update-env-vars', 'GCP_SERVICE_ACCOUNT=$_GCP_SERVICE_ACCOUNT']
+           '--platform', 'managed'
+           ]
     secretEnv: ['GCP_SERVICE_ACCOUNT']
 
 # Define the secret to use from Secret Manager
