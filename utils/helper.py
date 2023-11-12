@@ -1,6 +1,6 @@
 import os
 import uuid
-
+import logging
 from flask import render_template, url_for
 from sendgrid.helpers.mail import Mail
 
@@ -55,12 +55,14 @@ def check_if_image_is_valid(request):
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-
+        logging.info('been here')
+        logging.info('been here file name', filename)
         import json
         if os.getenv('project') == "local":
             service_account_path = r'C:\Users\hrist\OneDrive\Desktop\gcp training\compelling-muse-401714-52e01b7f32ec.json'
             storage_client = storage.Client.from_service_account_json(service_account_path)
         else:
+            logging.info('been here')
             # For production, decode the base64 string
             service_account_info = os.environ.get('GCP_SERVICE_ACCOUNT')
             service_account_json = json.loads(service_account_info)

@@ -13,6 +13,7 @@ from managers.auth import AuthManager, auth
 from managers.user import verify_user
 from utils.helper import modify_name, check_if_image_is_valid, UPLOAD_FOLDER, generate_unique_id, \
     send_registration_email, send_reset_email
+import logging
 
 register_route = Blueprint('register', __name__)
 
@@ -97,8 +98,8 @@ def gym_items():
     user_id = g.flask_httpauth_user.id
 
     filename = check_if_image_is_valid(request)
-    print('filename is', filename)
-    print('filename is2', filename)
+    logging.info('filename is', filename)
+    logging.info('filename is2', filename)
     if filename:
         data = request.form.to_dict()
 

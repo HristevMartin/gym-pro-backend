@@ -4,6 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sendgrid import SendGridAPIClient
+import logging
 
 app = Flask(__name__)
 
@@ -14,16 +15,18 @@ CORS(app,  supports_credentials=True)
 
 db_path = os.path.join(os.path.dirname(__file__), 'gym_db.sqlite')
 
-user = os.environ.get('user')
-password = os.environ.get('password')
-host = os.environ.get('host')
-port = os.environ.get('port')
-database = os.environ.get('database')
+# user = os.environ.get('user')
+# password = os.environ.get('password')
+# host = os.environ.get('host')
+# port = os.environ.get('port')
+# database = os.environ.get('database')
 
 if os.getenv('project') == 'local':
     db_uri = 'sqlite:///{}'.format(db_path)
 else:
     db_uri = 'sqlite:///{}'.format(db_path)
+
+logging.info("Database URI:", db_uri)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
