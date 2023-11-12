@@ -13,24 +13,26 @@
 #
 
 steps:
-# Build the Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA', '.']
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA', '.']
 
-# Push the image to Google Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA']
+  # Push the image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA']
 
-# Deploy the image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'gym-flask-pro',
-         '--image', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA',
-         '--region', 'europe-west1',
-         '--platform', 'managed',
-         '--update-secrets', 'GCP_SERVICE_ACCOUNT=GCP_SERVICE_ACCOUNT:latest']
-  secretEnv: ['GCP_SERVICE_ACCOUNT']
+  # Deploy the image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'gym-flask-pro',
+           '--image', 'gcr.io/compelling-muse-401714/gym-flask-pro:$SHORT_SHA',
+           '--region', 'europe-west1',
+           '--platform', 'managed',
+           '--update-env-vars', 'GCP_SERVICE_ACCOUNT=$_GCP_SERVICE_ACCOUNT']
+    secretEnv: ['GCP_SERVICE_ACCOUNT']
 
-secrets:
-- kmsKeyName: projects/your-project-id/secrets/GCP_SERVICE_ACCOUNT/versions/latest
-  secretEnv:
-    GCP_SERVICE_ACCOUNT: 'GCP_SERVICE_ACCOUNT'
+# Define the secret to use from Secret Manager
+availableSecrets:
+  secretManager:
+    - versionName: projects/compelling-muse-401714/secrets/GCP_SERVICE_ACCOUNT/versions/latest
+      env: 'GCP_SERVICE_ACCOUNT'
+
