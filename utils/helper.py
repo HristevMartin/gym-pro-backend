@@ -36,6 +36,7 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+
 def check_if_image_is_valid(request):
     from werkzeug.utils import secure_filename
     from google.cloud import storage
@@ -64,7 +65,8 @@ def check_if_image_is_valid(request):
         else:
             logging.info('been here')
             # For production, decode the base64 string
-            service_account_info = os.environ.get('GCP_SERVICE_ACCOUNT')
+            service_account_info = os.environ.get('YOUR_ENV_VAR')
+
             service_account_json = json.loads(service_account_info)
             storage_client = storage.Client.from_service_account_json(service_account_json)
 

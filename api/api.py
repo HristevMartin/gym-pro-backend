@@ -91,6 +91,22 @@ def user_logout():
 def home():
     return 'Home'
 
+@register_route.route('/check-env')
+def check_env():
+    # Fetch the values of the environment variables
+    gcp_service_account = os.getenv('GCP_SERVICE_ACCOUNT', 'Not Set')
+    your_env_var = os.getenv('YOUR_ENV_VAR', 'Not Set')
+    print('gcp_service_account', gcp_service_account)
+    print('your_env_var', your_env_var)
+
+    logging.info('gcp_service_account', gcp_service_account)
+    logging.info('your_env_var', your_env_var)
+
+    # Return the values in JSON format
+    return jsonify({
+        'GCP_SERVICE_ACCOUNT': gcp_service_account,
+        'YOUR_ENV_VAR': your_env_var
+    }), 200
 
 @register_route.route('/gym-items', methods=['GET', 'POST'])
 @auth.login_required
